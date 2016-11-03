@@ -57,22 +57,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         getUTF8Text() 메소드로 이미지안의 텍스트를 추출하여 반환 합니다.
         이를 텍스트에 표시하여 줍니다.
          */
-        System.out.println("inspectBitmap");
         baseAPI.setImage(bitmap);
-        System.out.println("setImage");
         String text = baseAPI.getUTF8Text();
-        System.out.println("text is" + text);
         setTextInTextView(text);
         bitmap = null;
         //bitmap.recycle();
     }
 
     private void inspect(Uri uri) {
-        System.out.println("eienxnxnxnxnxn");
         InputStream is = null;
 
         try {
-            System.out.println("try!");
             /*
             받은 경로에서 이미지를 추출합니다. 여기서 BitmapFactory.Options를 통해서
             해상도 수정하는 부분인데, 이 테스트코드를 썼던 분이 고화질 이미지를 다루어서 그런지...
@@ -89,18 +84,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             Bitmap bitmap = BitmapFactory.decodeStream(is);
             inspectFromBitmap(bitmap);
         } catch (FileNotFoundException e) {
-            System.out.println("catch!");
             e.printStackTrace();
         } finally {
             if (is != null) {
                 try {
-                    System.out.println("is is not null and try");
                     is.close();
                 } catch (IOException e) {
-                    System.out.println("is is not null and catch");
                 }
             }
-            System.out.println("is is null");
         }
     }
 
@@ -114,7 +105,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         switch (requestCode) {
             case REQUEST_GALLERY:
                 if (resultCode == RESULT_OK) {
-                    System.out.println("eijfsdlk");
                     inspect(data.getData());
                 }
                 break;
