@@ -11,10 +11,9 @@
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
  * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
- * License for the specific language governing permissions and limitations under
+ * License for the  specific language governing permissions and limitations under
  * the License.
  */
-
 package com.googlecode.tesseract.android;
 
 import java.io.File;
@@ -41,7 +40,7 @@ public class TessBaseAPI {
     private long mNativeData;
 
     static {
-            System.loadLibrary("jpgt");
+        System.loadLibrary("jpgt");
         System.loadLibrary("pngt");
         System.loadLibrary("lept");
         System.loadLibrary("tess");
@@ -565,12 +564,13 @@ public class TessBaseAPI {
      * @return the recognized text
      */
     public String getUTF8Text() {
+        System.out.println("start!!!!!!1");
         if (mRecycled)
             throw new IllegalStateException();
-
+        System.out.println("getUTF8Text started");
         // Trim because the text will have extra line breaks at the end
         String text = nativeGetUTF8Text(mNativeData);
-
+        System.out.println("getUTF8TextEnd" + text);
         return text != null ? text.trim() : null;
     }
 

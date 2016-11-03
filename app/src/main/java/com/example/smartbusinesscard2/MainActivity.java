@@ -6,15 +6,12 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
+import android.util.DisplayMetrics;
 import android.view.View;
-import android.view.Menu;
-import android.view.MenuItem;
+import android.support.v7.app.AppCompatActivity;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.googlecode.tesseract.android.TessBaseAPI;
 
@@ -23,12 +20,12 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener {
-
+public class MainActivity extends AppCompatActivity implements View.OnClickListener{
     private static final int REQUEST_GALLERY = 0;
     private static final int REQUEST_CAMERA = 1;
 
     private TessBaseAPI baseAPI;
+
 
     @Override
     public void onClick(View v) {
@@ -60,16 +57,22 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         getUTF8Text() 메소드로 이미지안의 텍스트를 추출하여 반환 합니다.
         이를 텍스트에 표시하여 줍니다.
          */
+        System.out.println("inspectBitmap");
         baseAPI.setImage(bitmap);
+        System.out.println("setImage");
         String text = baseAPI.getUTF8Text();
+        System.out.println("text is" + text);
         setTextInTextView(text);
         bitmap = null;
+        //bitmap.recycle();
     }
 
     private void inspect(Uri uri) {
+        System.out.println("eienxnxnxnxnxn");
         InputStream is = null;
 
         try {
+            System.out.println("try!");
             /*
             받은 경로에서 이미지를 추출합니다. 여기서 BitmapFactory.Options를 통해서
             해상도 수정하는 부분인데, 이 테스트코드를 썼던 분이 고화질 이미지를 다루어서 그런지...
@@ -86,15 +89,18 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             Bitmap bitmap = BitmapFactory.decodeStream(is);
             inspectFromBitmap(bitmap);
         } catch (FileNotFoundException e) {
+            System.out.println("catch!");
             e.printStackTrace();
         } finally {
             if (is != null) {
                 try {
+                    System.out.println("is is not null and try");
                     is.close();
                 } catch (IOException e) {
-
+                    System.out.println("is is not null and catch");
                 }
             }
+            System.out.println("is is null");
         }
     }
 
@@ -108,6 +114,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         switch (requestCode) {
             case REQUEST_GALLERY:
                 if (resultCode == RESULT_OK) {
+                    System.out.println("eijfsdlk");
                     inspect(data.getData());
                 }
                 break;
@@ -121,21 +128,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
 
+        /*
+        버튼 이벤트를 부여해줍니다.
+         */
         Button button = (Button)findViewById(R.id.button);
         button.setOnClickListener(this);
-         /*
+
+        /*
         TessBaseAPI가 Tesseract OCR을 사용하게 될 클래스 입니다.
         setDebug 설정은 정확히 추가적으로 무슨 기능을 하는지 모르겠으나, 일단 목적은 디버그 이므로
         설정을 해줬습니다.
@@ -181,27 +182,5 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         //baseAPI.setVariable(TessBaseAPI.VAR_CHAR_BLACKLIST, "!@#$%^&*()_+=-[]}{;:'\"\\|~`,./<>?");
         baseAPI.setPageSegMode(TessBaseAPI.PageSegMode.PSM_SPARSE_TEXT);
         //baseAPI.end();
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
     }
 }
