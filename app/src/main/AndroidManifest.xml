@@ -31,6 +31,11 @@
             android:name=".DialogCardInformation"
             android:theme="@android:style/Theme.DeviceDefault.Light.Dialog">
         </activity>
+        <activity
+            android:name=".DialogCardEdit"
+            android:theme="@android:style/Theme.DeviceDefault.Light.Dialog"
+            android:noHistory="true">
+        </activity>
     </application>
 
 </manifest>

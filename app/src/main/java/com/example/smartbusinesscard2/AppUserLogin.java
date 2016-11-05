@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
+import android.util.DisplayMetrics;
 import android.view.View;
 import android.widget.Button;
 
@@ -18,7 +19,6 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.URI;
 
 /**
  * Created by 현욱 on 2016-11-03.
@@ -77,7 +77,7 @@ public class AppUserLogin  extends AppCompatActivity {
     }
 
     private void inspectFromBitmap(Bitmap bitmap) {
-        Intent intent = new Intent();
+        Intent intent = new Intent(AppUserLogin.this,DialogCardInformation.class);
         baseAPI.setImage(bitmap);
         String text = baseAPI.getUTF8Text();
         System.out.println(text +"");
@@ -87,29 +87,33 @@ public class AppUserLogin  extends AppCompatActivity {
         for(int i = 0; i < arraysz; i++) {
             if(strarray[i].contains("@")) {
                 strarray[i].trim();
-                intent.putExtra("email", strarray[i]);
+                System.out.println("email:" + strarray[i]);
+                intent.putExtra("email1", strarray[i]);
                 continue;
             }
             //strarray[i].matches(".*[0-9].*")
             if(strarray[i].contains("TEL") || strarray[i].contains("Tel")) {
                 strarray[i].trim();
-                int start = strarray[i].indexOf("L");
+                int start = strarray[i].indexOf("L") + 3;
                 if(start < 1)
-                    start = strarray[i].indexOf("l");
-                intent.putExtra("tel", strarray[i].substring(start));
+                    start = strarray[i].indexOf("l") + 3;
+                System.out.println("tel:"+strarray[i].substring(start));
+                intent.putExtra("tel1", strarray[i].substring(start));
                 continue;
             }
             if (strarray[i].contains("FAX") || strarray[i].contains("Fax")) {
                 strarray[i].trim();
-                int start = strarray[i].indexOf("X");
+                int start = strarray[i].indexOf("X") + 3;
                 if(start < 1)
-                    start = strarray[i].indexOf("x");
-                intent.putExtra("fax", strarray[i].substring(start));
+                    start = strarray[i].indexOf("x") + 3;
+                System.out.println("fax:"+strarray[i].substring(start));
+                intent.putExtra("fax1", strarray[i].substring(start));
                 continue;
             }
         }
         bitmap = null;
-        startActivity(new Intent(this, DialogCardInformation.class));
+        startActivityForResult(intent,1);
+        //startActivity(new Intent(this, DialogCardInformation.class));
     }
 
     private void inspect(Uri uri) {
@@ -117,7 +121,12 @@ public class AppUserLogin  extends AppCompatActivity {
 
         try {
             is = getContentResolver().openInputStream(uri);
-            Bitmap bitmap = BitmapFactory.decodeStream(is);
+            BitmapFactory.Options options = new BitmapFactory.Options();
+            options.inPreferredConfig = Bitmap.Config.ARGB_8888;
+            options.inSampleSize = 2;
+            options.inScreenDensity = DisplayMetrics.DENSITY_LOW;
+            Bitmap bitmap = BitmapFactory.decodeStream(is, null, options);
+//            Bitmap bitmap = BitmapFactory.decodeStream(is);
             inspectFromBitmap(bitmap);
         } catch (FileNotFoundException e) {
             e.printStackTrace();
