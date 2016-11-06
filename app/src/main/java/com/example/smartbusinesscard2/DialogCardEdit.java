@@ -36,6 +36,8 @@ public class DialogCardEdit extends Activity implements View.OnClickListener {
         String fax = intent1.getStringExtra("fax2");
         String email = intent1.getStringExtra("email2");
 
+        System.out.println("Oncreate called");
+
         nameEt.setText(String.format("%s", name));
         posEt.setText(String.format("%s", position));
         comEt.setText(String.format("%s", company));
@@ -63,7 +65,7 @@ public class DialogCardEdit extends Activity implements View.OnClickListener {
                 break;
             case R.id.confirmBtn:
                 System.out.println("push confirmBtn");
-                Intent intent1 = new Intent(DialogCardEdit.this,DialogCardInformation.class);
+                Intent intent1 = new Intent();
                 intent1.putExtra("name4", nameEt.getText().toString());
                 intent1.putExtra("pos4", posEt.getText().toString());
                 intent1.putExtra("com4", comEt.getText().toString());

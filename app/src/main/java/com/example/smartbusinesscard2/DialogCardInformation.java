@@ -1,7 +1,10 @@
 package com.example.smartbusinesscard2;
 
 import android.app.Activity;
+import android.content.ContentValues;
 import android.content.Intent;
+import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteException;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
@@ -11,6 +14,9 @@ import android.widget.TextView;
  */
 public class DialogCardInformation extends Activity implements View.OnClickListener {
     TextView nameTv, conameTv, emailTv, telTv, faxTv, posTv;
+    DBManager dbManager;
+    SQLiteDatabase sqLiteDatabase;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -31,23 +37,19 @@ public class DialogCardInformation extends Activity implements View.OnClickListe
 
         emailTv = (TextView)findViewById(R.id.emailTextView);
         String email = intent.getStringExtra("email1");
-        System.out.println("intent email:" + email);
         emailTv.setText(String.format("%s", email));
 
         telTv = (TextView)findViewById(R.id.phoneTextView);
         String tel = intent.getStringExtra("tel1");
-        System.out.println("intent tel:" + tel);
         telTv.setText(String.format("%s", tel));
 
         faxTv = (TextView)findViewById(R.id.faxTextView);
         String fax = intent.getStringExtra("fax1");
-        System.out.println("intent fax:" + fax);
         faxTv.setText(String.format("%s", fax));
 
         posTv = (TextView)findViewById(R.id.positionTextView);
         String pos = intent.getStringExtra("position");
         posTv.setText(String.format("%s", pos));
-
     }
 
     public void onClick(View v) {
@@ -65,7 +67,23 @@ public class DialogCardInformation extends Activity implements View.OnClickListe
                 startActivityForResult(intent1, 1);
                 break;
             case R.id.saveBtn:
-
+                Intent intent2 = new Intent(DialogCardInformation.this,AppUserLogin.class);
+                dbOpen();
+                ContentValues values = new ContentValues();
+                values.put("u_name", nameTv.getText().toString());
+                values.put("c_name", conameTv.getText().toString());
+                values.put("phone", telTv.getText().toString());
+                values.put("email", emailTv.getText().toString());
+                values.put("fax", faxTv.getText().toString());
+                values.put("position", posTv.getText().toString());
+                try {
+                    sqLiteDatabase.insert("USER", null, values);
+                } catch (SQLiteException e) {
+                    System.out.println("insert error");
+                }
+                dbClose();
+                finish();
+                startActivity(new Intent(this, MainActivity.class));
                 break;
         }
     }
@@ -77,15 +95,29 @@ public class DialogCardInformation extends Activity implements View.OnClickListe
         {
             if(requestCode==1) // requestCode==1 로 호출한 경우에만 처리합니다.
             {
-                Intent intent2 = getIntent();
-                nameTv.setText(String.format("%s", intent2.getStringExtra("name4")));
-                conameTv.setText(String.format("%s", intent2.getStringExtra("com4")));
-                emailTv.setText(String.format("%s", intent2.getStringExtra("email4")));
-                telTv.setText(String.format("%s", intent2.getStringExtra("phone4")));
-                faxTv.setText(String.format("%s", intent2.getStringExtra("fax4")));
-                System.out.println("intent.getStringExtra(fax4):" + intent2.getStringExtra("fax4"));
-                posTv.setText(String.format("%s", intent2.getStringExtra("pos4")));
+                nameTv.setText(String.format("%s", data.getStringExtra("name4")));
+                conameTv.setText(String.format("%s", data.getStringExtra("com4")));
+                emailTv.setText(String.format("%s", data.getStringExtra("email4")));
+                telTv.setText(String.format("%s", data.getStringExtra("phone4")));
+                faxTv.setText(String.format("%s", data.getStringExtra("fax4")));
+                System.out.println("data.getStringExtra(fax4):" + data.getStringExtra("fax4"));
+                posTv.setText(String.format("%s", data.getStringExtra("pos4")));
             }
         }
     }
+
+    void dbOpen() {
+        if(dbManager == null) {
+            dbManager = new DBManager(this, "myDB.db", null, 1);
+        }
+        sqLiteDatabase = dbManager.getWritableDatabase();
+    }
+    void dbClose() {
+        if(sqLiteDatabase != null) {
+            if(sqLiteDatabase.isOpen()) {
+                sqLiteDatabase.close();
+            }
+        }
+    }
+
 }
