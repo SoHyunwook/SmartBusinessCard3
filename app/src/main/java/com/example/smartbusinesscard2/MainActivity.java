@@ -4,7 +4,6 @@ import android.content.ContentValues;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteException;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
@@ -16,8 +15,7 @@ import android.util.DisplayMetrics;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.support.v7.app.AppCompatActivity;
-import android.view.View;
-import android.widget.TextView;
+import android.widget.ListView;
 
 import com.google.android.gms.appindexing.Action;
 import com.google.android.gms.appindexing.AppIndex;
@@ -28,6 +26,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
 
 /**
  * Created by 현욱 on 2016-11-03.
@@ -40,6 +39,9 @@ public class MainActivity extends AppCompatActivity {
     DBManager dbManager;
     SQLiteDatabase sqLiteDatabase;
     Cursor cursor;
+    ListView list;
+    CardmemberAdapter adapter;
+    ArrayList<Cardmember> data = null;
     private static final int REQUEST_GALLERY = 0;
     private static final int REQUEST_CAMERA = 1;
 
@@ -50,16 +52,10 @@ public class MainActivity extends AppCompatActivity {
      */
     private GoogleApiClient client;
 
-    private void setTextInTextView(String str) {
-        TextView textView = (TextView) findViewById(R.id.textView);
-        textView.setText(str);
-    }
-
     private void inspectFromBitmap(Bitmap bitmap) {
         Intent intent = new Intent(MainActivity.this,PrintInformation.class);
         baseAPI.setImage(bitmap);
         String text = baseAPI.getUTF8Text();
-        setTextInTextView(text);
 
         String[] strarray;
         strarray = text.split("\n");
@@ -160,6 +156,31 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         setSupportActionBar((Toolbar) findViewById(R.id.toolbar));
 
+        dbManager = new DBManager(this, "myDB.db", null, 1);
+        list = (ListView)findViewById(R.id.listView);
+
+        sqLiteDatabase = dbManager.getReadableDatabase();
+        cursor = sqLiteDatabase.query("CARDMEMBER", null, null, null, null, null, null);
+        data = new ArrayList<Cardmember>();
+        Cardmember cardmember;
+        while(cursor.moveToNext()) {
+            cardmember = new Cardmember();
+            cardmember._id = cursor.getInt(0);
+            cardmember.p_name = cursor.getString(1);
+            cardmember.c_name = cursor.getString(2);
+            cardmember.phone = cursor.getString(3);
+            cardmember.email = cursor.getString(4);
+            cardmember.fax = cursor.getString(5);
+            cardmember.position = cursor.getString(6);
+            data.add(cardmember);
+        }
+        cursor.close();
+        sqLiteDatabase.close();
+        dbManager.close();
+
+        adapter = new CardmemberAdapter(this, R.layout.card, data);
+        list.setAdapter(adapter);
+
         baseAPI = new TessBaseAPI();
         baseAPI.setDebug(true);
 
@@ -171,7 +192,6 @@ public class MainActivity extends AppCompatActivity {
         try {
             baseAPI.init(path, "eng");
         } catch (Exception e) {
-            setTextInTextView(path + "||" + e.toString());
         }
         baseAPI.setPageSegMode(TessBaseAPI.PageSegMode.PSM_SPARSE_TEXT);
         client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();

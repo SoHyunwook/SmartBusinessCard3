@@ -75,14 +75,14 @@ public class PrintInformation extends AppCompatActivity implements View.OnClickL
             case R.id.saveBtn1:
                 dbOpen();
                 ContentValues values = new ContentValues();
-                values.put("u_name", nameTv.getText().toString());
+                values.put("p_name", nameTv.getText().toString());
                 values.put("c_name", conameTv.getText().toString());
                 values.put("phone", telTv.getText().toString());
                 values.put("email", emailTv.getText().toString());
                 values.put("fax", faxTv.getText().toString());
                 values.put("position", posTv.getText().toString());
                 try {
-                    sqLiteDatabase.insert("USER", null, values);
+                    sqLiteDatabase.insert("CARDMEMBER", null, values);
                 } catch (SQLiteException e) {
                     System.out.println("insert error");
                 }
