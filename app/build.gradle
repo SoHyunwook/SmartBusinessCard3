@@ -30,4 +30,5 @@ dependencies {
     compile 'com.android.support:design:23.1.1'
     compile 'com.rmtheis:tess-two:5.4.1'
     //compile project(':libraries:tess-two')
+    compile 'com.google.android.gms:play-services-appindexing:8.1.0'
 }

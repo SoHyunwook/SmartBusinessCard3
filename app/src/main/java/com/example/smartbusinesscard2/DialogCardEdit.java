@@ -9,6 +9,7 @@ import android.widget.TextView;
 
 /**
  * Created by 현욱 on 2016-11-05.
+ * 명함의 정보를 수정할 수 있는 페이지
  */
 public class DialogCardEdit extends Activity implements View.OnClickListener {
     EditText nameEt, posEt, comEt, phoneEt, faxEt, emailEt;
@@ -51,15 +52,22 @@ public class DialogCardEdit extends Activity implements View.OnClickListener {
         switch (v.getId()) {
             case R.id.cancleBtn:
                 Intent intent = new Intent(DialogCardEdit.this,DialogCardInformation.class);
+                Intent intent3 = new Intent(DialogCardEdit.this, PrintInformation.class);
                 intent.putExtra("name4", nameEt.getText().toString());
+                intent3.putExtra("name4", nameEt.getText().toString());
                 intent.putExtra("pos4", posEt.getText().toString());
+                intent3.putExtra("pos4", posEt.getText().toString());
                 intent.putExtra("com4", comEt.getText().toString());
+                intent3.putExtra("com4", comEt.getText().toString());
                 intent.putExtra("phone4", phoneEt.getText().toString());
+                intent3.putExtra("phone4", phoneEt.getText().toString());
                 intent.putExtra("fax4", faxEt.getText().toString());
-                System.out.println("edit fax4:" + faxEt.getText().toString());
+                intent3.putExtra("fax4", faxEt.getText().toString());
                 intent.putExtra("email4", emailEt.getText().toString());
+                intent3.putExtra("email4", emailEt.getText().toString());
 
                 setResult(RESULT_OK,intent);
+                setResult(RESULT_OK,intent3);
                 finish();
                 System.out.println("cancle finish() called");
                 break;

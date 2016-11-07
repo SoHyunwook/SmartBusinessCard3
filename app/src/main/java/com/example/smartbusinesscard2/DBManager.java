@@ -2,6 +2,7 @@ package com.example.smartbusinesscard2;
 
 /**
  * Created by 현욱 on 2016-11-03.
+ * db관리 파일
  */
 import android.content.Context;
 import android.database.sqlite.SQLiteOpenHelper;

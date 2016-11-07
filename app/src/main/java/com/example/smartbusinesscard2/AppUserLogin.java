@@ -1,6 +1,5 @@
 package com.example.smartbusinesscard2;
 
-import android.app.Activity;
 import android.content.ContentValues;
 import android.content.Intent;
 import android.database.Cursor;
@@ -25,8 +24,10 @@ import java.io.InputStream;
 
 /**
  * Created by 현욱 on 2016-11-03.
+ * 앱초기 실행시에 사용자 정보 등록을 위한 페이지
+ * 앱이 실행되고 사용자의 정보가 db에 저장된 후에는 나타나지 않음
  */
-public class AppUserLogin  extends AppCompatActivity {
+public class AppUserLogin extends AppCompatActivity {
 
     Button cameraBtn = null;
     private static final int REQUEST_CAMERA = 1;
@@ -140,7 +141,6 @@ public class AppUserLogin  extends AppCompatActivity {
         }
         bitmap = null;
         startActivityForResult(intent, 1);
-        //startActivity(new Intent(this, DialogCardInformation.class));
     }
 
     private void inspect(Uri uri) {
@@ -153,7 +153,6 @@ public class AppUserLogin  extends AppCompatActivity {
             options.inSampleSize = 2;
             options.inScreenDensity = DisplayMetrics.DENSITY_LOW;
             Bitmap bitmap = BitmapFactory.decodeStream(is, null, options);
-//            Bitmap bitmap = BitmapFactory.decodeStream(is);
             inspectFromBitmap(bitmap);
         } catch (FileNotFoundException e) {
             e.printStackTrace();
