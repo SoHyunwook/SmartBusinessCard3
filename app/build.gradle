@@ -31,4 +31,13 @@ dependencies {
     compile 'com.rmtheis:tess-two:5.4.1'
     //compile project(':libraries:tess-two')
     compile 'com.google.android.gms:play-services-appindexing:8.1.0'
+    compile('com.google.api-client:google-api-client-android:1.20.0') {
+        exclude group: 'org.apache.httpcomponents'
+    }
+    compile('com.google.apis:google-api-services-gmail:v1-rev29-1.20.0') {
+        exclude group: 'org.apache.httpcomponents'
+    }
+    compile files('libs/activation.jar')
+    compile files('libs/additionnal.jar')
+    compile files('libs/mail.jar')
 }
