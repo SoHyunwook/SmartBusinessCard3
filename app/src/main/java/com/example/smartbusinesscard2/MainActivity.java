@@ -1,20 +1,25 @@
 package com.example.smartbusinesscard2;
 
 import android.content.ContentValues;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteException;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
 import android.util.DisplayMetrics;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.support.v7.app.AppCompatActivity;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.google.android.gms.appindexing.Action;
@@ -155,11 +160,13 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         setSupportActionBar((Toolbar) findViewById(R.id.toolbar));
+        System.out.println("MainActivity onCreate()");
 
-        dbManager = new DBManager(this, "myDB.db", null, 1);
+        dbOpen();
+        //dbManager = new DBManager(this, "myDB.db", null, 1);
         list = (ListView)findViewById(R.id.listView);
 
-        sqLiteDatabase = dbManager.getReadableDatabase();
+        //sqLiteDatabase = dbManager.getReadableDatabase();
         cursor = sqLiteDatabase.query("CARDMEMBER", null, null, null, null, null, null);
         data = new ArrayList<Cardmember>();
         Cardmember cardmember;
@@ -173,13 +180,89 @@ public class MainActivity extends AppCompatActivity {
             cardmember.fax = cursor.getString(5);
             cardmember.position = cursor.getString(6);
             data.add(cardmember);
+            System.out.println("7");
         }
         cursor.close();
-        sqLiteDatabase.close();
+        dbClose();
+        //sqLiteDatabase.close();
         dbManager.close();
 
         adapter = new CardmemberAdapter(this, R.layout.card, data);
         list.setAdapter(adapter);
+
+        list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                dbOpen();
+                System.out.println("onItemClick: " + id);
+                System.out.println("onItemClick position:" + position);
+                cursor = sqLiteDatabase.rawQuery("SELECT * FROM CARDMEMBER", null);
+                Cursor c = cursor;
+                c.moveToPosition(position);
+                Intent i = new Intent(MainActivity.this, PrintInformation2.class);
+                i.putExtra("_id", id);
+                i.putExtra("pname", c.getString(c.getColumnIndexOrThrow("p_name")));
+                i.putExtra("comname", c.getString(c.getColumnIndexOrThrow("c_name")));
+                i.putExtra("tel1", c.getString(c.getColumnIndexOrThrow("phone")));
+                i.putExtra("email1", c.getString(c.getColumnIndexOrThrow("email")));
+                i.putExtra("fax1", c.getString(c.getColumnIndexOrThrow("fax")));
+                i.putExtra("position", c.getString(c.getColumnIndexOrThrow("position")));
+                startActivity(i);
+                System.out.println("after startActivity()");
+
+                cursor.close();
+                dbClose();
+                dbManager.close();
+                System.out.println("onclick end");
+            }
+        });
+
+        list.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            int position1;
+            long id1;
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+                position1 = position;
+                id1 = id;
+                System.out.println("onItemLongClick:" + id);
+                AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+                builder.setMessage("Do you want delete this?")
+                        .setCancelable(true)
+                        .setPositiveButton("OK", new DialogInterface.OnClickListener(){
+                            public void onClick(DialogInterface dialog, int whichButton){
+                                dbOpen();
+                                cursor = sqLiteDatabase.rawQuery("SELECT * FROM CARDMEMBER", null);
+                                Cursor c1 = cursor;
+                                c1.moveToPosition(position1);
+                                System.out.println("position:" + position1);
+                                System.out.println("id+1:" + (id1 + 1));
+                                String sql = "delete from CARDMEMBER" + " where _id = "+ (id1 + 1) +";";
+                                System.out.println("sql delete:" + sql);
+                                try {
+                                    sqLiteDatabase.execSQL(sql);
+                                    System.out.println("complete delete");
+                                } catch(SQLiteException e) {
+                                    System.out.println("error delete:" + e);
+                                }
+
+                            }
+                        })
+                        .setNegativeButton("CANCEL", new DialogInterface.OnClickListener(){
+                            public void onClick(DialogInterface dialog, int whichButton){
+                                dialog.cancel();
+                            }
+                        });
+                AlertDialog dialog = builder.create();    // 알림창 객체 생성
+                dialog.show();    // 알림창 띄우기
+
+
+                cursor.close();
+                dbClose();
+                dbManager.close();
+                System.out.println("end of Long click");
+                return true;
+            }
+        });
 
         baseAPI = new TessBaseAPI();
         baseAPI.setDebug(true);
@@ -195,7 +278,10 @@ public class MainActivity extends AppCompatActivity {
         }
         baseAPI.setPageSegMode(TessBaseAPI.PageSegMode.PSM_SPARSE_TEXT);
         client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
+        System.out.println("end of MainActiity oncreate");
     }
+
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -272,5 +358,18 @@ public class MainActivity extends AppCompatActivity {
         );
         AppIndex.AppIndexApi.end(client, viewAction);
         client.disconnect();
+    }
+    void dbOpen() {
+        if(dbManager == null) {
+            dbManager = new DBManager(this, "myDB.db", null, 1);
+        }
+        sqLiteDatabase = dbManager.getWritableDatabase();
+    }
+    void dbClose() {
+        if(sqLiteDatabase != null) {
+            if(sqLiteDatabase.isOpen()) {
+                sqLiteDatabase.close();
+            }
+        }
     }
 }

@@ -46,6 +46,8 @@ public class CardmemberAdapter extends BaseAdapter {
         pnametv.setText(card.p_name);
         TextView cnametv = (TextView)convertView.findViewById(R.id.textView3);
         cnametv.setText(card.c_name);
+        TextView idtv = (TextView)convertView.findViewById(R.id.textView);
+        idtv.setText(String.valueOf(card._id));
         return convertView;
     }
 }

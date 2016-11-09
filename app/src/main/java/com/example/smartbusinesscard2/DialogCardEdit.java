@@ -51,6 +51,7 @@ public class DialogCardEdit extends Activity implements View.OnClickListener {
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.cancleBtn:
+                /*
                 Intent intent = new Intent(DialogCardEdit.this,DialogCardInformation.class);
                 Intent intent3 = new Intent(DialogCardEdit.this, PrintInformation.class);
                 intent.putExtra("name4", nameEt.getText().toString());
@@ -68,10 +69,12 @@ public class DialogCardEdit extends Activity implements View.OnClickListener {
 
                 setResult(RESULT_OK,intent);
                 setResult(RESULT_OK,intent3);
+                */
                 finish();
                 System.out.println("cancle finish() called");
                 break;
             case R.id.confirmBtn:
+                /*
                 System.out.println("push confirmBtn");
                 Intent intent1 = new Intent();
                 intent1.putExtra("name4", nameEt.getText().toString());
@@ -84,6 +87,32 @@ public class DialogCardEdit extends Activity implements View.OnClickListener {
 
                 setResult(RESULT_OK,intent1);
                 System.out.println("startActivityForResult");
+                */
+                Intent intent = new Intent(DialogCardEdit.this,DialogCardInformation.class);
+                Intent intent3 = new Intent(DialogCardEdit.this, PrintInformation.class);
+                Intent intent4 = new Intent(DialogCardEdit.this, PrintInformation2.class);
+                intent.putExtra("name4", nameEt.getText().toString());
+                intent3.putExtra("name4", nameEt.getText().toString());
+                intent4.putExtra("name4", nameEt.getText().toString());
+                intent.putExtra("pos4", posEt.getText().toString());
+                intent3.putExtra("pos4", posEt.getText().toString());
+                intent4.putExtra("pos4", posEt.getText().toString());
+                intent.putExtra("com4", comEt.getText().toString());
+                intent3.putExtra("com4", comEt.getText().toString());
+                intent4.putExtra("com4", comEt.getText().toString());
+                intent.putExtra("phone4", phoneEt.getText().toString());
+                intent3.putExtra("phone4", phoneEt.getText().toString());
+                intent4.putExtra("phone4", phoneEt.getText().toString());
+                intent.putExtra("fax4", faxEt.getText().toString());
+                intent3.putExtra("fax4", faxEt.getText().toString());
+                intent4.putExtra("fax4", faxEt.getText().toString());
+                intent.putExtra("email4", emailEt.getText().toString());
+                intent3.putExtra("email4", emailEt.getText().toString());
+                intent4.putExtra("email4", emailEt.getText().toString());
+
+                setResult(RESULT_OK,intent);
+                setResult(RESULT_OK,intent3);
+                setResult(RESULT_OK,intent4);
                 finish();
                 System.out.println("finish() called");
                 break;

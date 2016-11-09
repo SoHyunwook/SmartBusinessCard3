@@ -11,13 +11,10 @@ import android.view.View;
 import android.widget.TextView;
 
 /**
- * Created by 현욱 on 2016-11-07.
- * 명함을 앨범에서 불러오거나 사진으로 찍은 후,
- * 그 정보를 출력해주는 페이지에 해당하는 java파일
- * 이곳에서 수정, 저장이 가능
+ * Created by 현욱 on 2016-11-08.
+ * listview에서 클릭했을 때, 나오는 정보화면
  */
-public class PrintInformation extends AppCompatActivity implements View.OnClickListener {
-
+public class PrintInformation2  extends AppCompatActivity implements View.OnClickListener {
     TextView nameTv, conameTv, emailTv, telTv, faxTv, posTv;
     DBManager dbManager;
     SQLiteDatabase sqLiteDatabase;
@@ -27,34 +24,34 @@ public class PrintInformation extends AppCompatActivity implements View.OnClickL
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.print_information);
+        setContentView(R.layout.print_information_2);
 
-        findViewById(R.id.informEditBtn1).setOnClickListener(this);
-        findViewById(R.id.saveBtn1).setOnClickListener(this);
+        findViewById(R.id.informEditBtn5).setOnClickListener(this);
+        findViewById(R.id.saveBtn5).setOnClickListener(this);
 
         Intent intent = getIntent();
 
-        nameTv = (TextView)findViewById(R.id.nameTextView1);
+        nameTv = (TextView)findViewById(R.id.nameTextView5);
         String name = intent.getStringExtra("pname");
         nameTv.setText(String.format("%s", name));
 
-        conameTv = (TextView)findViewById(R.id.comNameTextView1);
+        conameTv = (TextView)findViewById(R.id.comNameTextView5);
         String comname = intent.getStringExtra("comname");
         conameTv.setText(String.format("%s", comname));
 
-        emailTv = (TextView)findViewById(R.id.emailTextView1);
+        emailTv = (TextView)findViewById(R.id.emailTextView5);
         String email = intent.getStringExtra("email1");
         emailTv.setText(String.format("%s", email));
 
-        telTv = (TextView)findViewById(R.id.phoneTextView1);
+        telTv = (TextView)findViewById(R.id.phoneTextView5);
         String tel = intent.getStringExtra("tel1");
         telTv.setText(String.format("%s", tel));
 
-        faxTv = (TextView)findViewById(R.id.faxTextView1);
+        faxTv = (TextView)findViewById(R.id.faxTextView5);
         String fax = intent.getStringExtra("fax1");
         faxTv.setText(String.format("%s", fax));
 
-        posTv = (TextView)findViewById(R.id.positionTextView1);
+        posTv = (TextView)findViewById(R.id.positionTextView5);
         String pos = intent.getStringExtra("position");
         posTv.setText(String.format("%s", pos));
     }
@@ -62,8 +59,8 @@ public class PrintInformation extends AppCompatActivity implements View.OnClickL
     public void onClick(View v) {
         Intent i = getIntent();
         switch (v.getId()) {
-            case R.id.informEditBtn1:
-                Intent intent1 = new Intent(PrintInformation.this,DialogCardEdit.class);
+            case R.id.informEditBtn5:
+                Intent intent1 = new Intent(PrintInformation2.this,DialogCardEdit.class);
 
                 intent1.putExtra("pname1", nameTv.getText());
                 intent1.putExtra("comname1", conameTv.getText());
@@ -74,7 +71,7 @@ public class PrintInformation extends AppCompatActivity implements View.OnClickL
 
                 startActivityForResult(intent1, 1);
                 break;
-            case R.id.saveBtn1:
+            case R.id.saveBtn5:
                 dbOpen();
                 ContentValues values = new ContentValues();
                 values.put("p_name", nameTv.getText().toString());
@@ -104,7 +101,9 @@ public class PrintInformation extends AppCompatActivity implements View.OnClickL
                     System.out.println("insert error");
                 }
                 dbClose();
+                System.out.println("Print");
                 finish();
+                System.out.println("end of Print");
                 break;
         }
     }

@@ -41,6 +41,10 @@
             android:label="Business Card Information">
         </activity>
         <activity
+            android:name=".PrintInformation2"
+            android:label="Business Card Information">
+        </activity>
+        <activity
             android:name=".MyInformation"
             android:label="My Information">
         </activity>
