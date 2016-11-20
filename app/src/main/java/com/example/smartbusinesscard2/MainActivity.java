@@ -187,8 +187,8 @@ public class MainActivity extends AppCompatActivity {
             cardmember.op_name = cursor.getString(7);
             cardmember.ophone = cursor.getString(8);
             data.add(cardmember);
+            adapter.notifyDataSetChanged();
         }
-        adapter.notifyDataSetChanged();
         cursor.close();
         dbClose();
         //sqLiteDatabase.close();
