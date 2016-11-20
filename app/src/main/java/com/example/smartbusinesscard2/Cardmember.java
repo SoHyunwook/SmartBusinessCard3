@@ -12,4 +12,6 @@ public class Cardmember {
     public String email;
     public String fax;
     public String position;
+    public String op_name;
+    public String ophone;
 }

@@ -8,6 +8,8 @@ import android.database.sqlite.SQLiteException;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 
 /**
@@ -16,10 +18,15 @@ import android.widget.TextView;
  */
 public class PrintInformation2  extends AppCompatActivity implements View.OnClickListener {
     TextView nameTv, conameTv, emailTv, telTv, faxTv, posTv;
+    RadioGroup rg, rg1, rg2;
+    RadioButton rb, rb1, rb2;
+    int id, id1, id2;
     DBManager dbManager;
     SQLiteDatabase sqLiteDatabase;
     Cursor cursor;
     public long imsi = -2;
+    public String phonenum = "";
+    public String pname = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,6 +61,10 @@ public class PrintInformation2  extends AppCompatActivity implements View.OnClic
         posTv = (TextView)findViewById(R.id.positionTextView5);
         String pos = intent.getStringExtra("position");
         posTv.setText(String.format("%s", pos));
+
+        rg = (RadioGroup)findViewById(R.id.radioGroup6);
+        rg1 = (RadioGroup)findViewById(R.id.radioGroup7);
+        rg2 = (RadioGroup)findViewById(R.id.radioGroup8);
     }
 
     public void onClick(View v) {
@@ -72,16 +83,47 @@ public class PrintInformation2  extends AppCompatActivity implements View.OnClic
                 startActivityForResult(intent1, 1);
                 break;
             case R.id.saveBtn5:
+                id = rg.getCheckedRadioButtonId();
+                System.out.println("rg id:" + id);
+                rb = (RadioButton)findViewById(id);
+                id1 = rg1.getCheckedRadioButtonId();
+                rb1 = (RadioButton)findViewById(id1);
+                id2 = rg2.getCheckedRadioButtonId();
+                rb2 = (RadioButton)findViewById(id2);
                 dbOpen();
                 ContentValues values = new ContentValues();
-                values.put("p_name", nameTv.getText().toString());
-                values.put("c_name", conameTv.getText().toString());
+                if(rb.getText().toString().equals("Name")) {
+                    values.put("p_name", nameTv.getText().toString());
+                    values.put("op_name", nameTv.getText().toString());
+                }
+                if(rb.getText().toString().equals("Position"))
+                    values.put("position", nameTv.getText().toString());
+                if(rb.getText().toString().equals("Company Name"))
+                    values.put("c_name", nameTv.getText().toString());
+                if(rb1.getText().toString().equals("Name")) {
+                    values.put("p_name", conameTv.getText().toString());
+                    values.put("op_name", conameTv.getText().toString());
+                }
+                if(rb1.getText().toString().equals("Position"))
+                    values.put("position", conameTv.getText().toString());
+                if(rb1.getText().toString().equals("Company Name"))
+                    values.put("c_name", conameTv.getText().toString());
+                if(rb2.getText().toString().equals("Name")) {
+                    values.put("p_name", posTv.getText().toString());
+                    values.put("op_name", posTv.getText().toString());
+                }
+                if(rb2.getText().toString().equals("Position"))
+                    values.put("position", posTv.getText().toString());
+                if(rb2.getText().toString().equals("Company Name"))
+                    values.put("c_name", posTv.getText().toString());
                 values.put("phone", telTv.getText().toString());
+                values.put("ophone", telTv.getText().toString());
                 values.put("email", emailTv.getText().toString());
                 values.put("fax", faxTv.getText().toString());
-                values.put("position", posTv.getText().toString());
                 try {
                     long imsi2 = i.getLongExtra("_id", imsi) + 1;
+                    String phonenum = i.getStringExtra("ophone");
+                    String op_name = i.getStringExtra("op_name");
                     System.out.println("imsi2: " + imsi2);
                     if(imsi2 >= 0) {
                         String sql = "update CARDMEMBER" + " set p_name = '" + nameTv.getText().toString()  +
@@ -90,7 +132,9 @@ public class PrintInformation2  extends AppCompatActivity implements View.OnClic
                                 "', email = '" + emailTv.getText().toString() +
                                 "', fax = '" + faxTv.getText().toString() +
                                 "', position = '" + posTv.getText().toString() +
-                                "' where _id = "+imsi2 + ";";
+                                "' where op_name = '" +op_name +
+                                "' and ophone = '" + phonenum +
+                                "';";
                         System.out.println("sql:" + sql);
                         sqLiteDatabase.execSQL(sql);
                         System.out.println("update db");

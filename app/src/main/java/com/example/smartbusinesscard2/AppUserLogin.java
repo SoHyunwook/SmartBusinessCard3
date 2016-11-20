@@ -139,6 +139,9 @@ public class AppUserLogin extends AppCompatActivity {
                 continue;
             }
         }
+        intent.putExtra("pname", strarray[0]);
+        intent.putExtra("position", strarray[1]);
+        intent.putExtra("comname", strarray[2]);
         bitmap = null;
         startActivityForResult(intent, 1);
     }

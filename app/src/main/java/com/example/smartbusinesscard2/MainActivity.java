@@ -94,6 +94,9 @@ public class MainActivity extends AppCompatActivity {
                 continue;
             }
         }
+        intent.putExtra("pname", strarray[0]);
+        intent.putExtra("position", strarray[1]);
+        intent.putExtra("comname", strarray[2]);
         bitmap = null;
         startActivityForResult(intent, 1);
     }
@@ -181,9 +184,11 @@ public class MainActivity extends AppCompatActivity {
             cardmember.email = cursor.getString(4);
             cardmember.fax = cursor.getString(5);
             cardmember.position = cursor.getString(6);
+            cardmember.op_name = cursor.getString(7);
+            cardmember.ophone = cursor.getString(8);
             data.add(cardmember);
-            System.out.println("7");
         }
+        adapter.notifyDataSetChanged();
         cursor.close();
         dbClose();
         //sqLiteDatabase.close();
@@ -218,6 +223,8 @@ public class MainActivity extends AppCompatActivity {
                 i.putExtra("email1", c.getString(c.getColumnIndexOrThrow("email")));
                 i.putExtra("fax1", c.getString(c.getColumnIndexOrThrow("fax")));
                 i.putExtra("position", c.getString(c.getColumnIndexOrThrow("position")));
+                i.putExtra("op_name", c.getString(c.getColumnIndexOrThrow("op_name")));
+                i.putExtra("ophone", c.getString(c.getColumnIndexOrThrow("ophone")));
                 startActivity(i);
                 System.out.println("after startActivity()");
 
@@ -247,7 +254,7 @@ public class MainActivity extends AppCompatActivity {
                                 c1.moveToPosition(position1);
                                 System.out.println("position:" + position1);
                                 System.out.println("id+1:" + (id1 + 1));
-                                String sql = "delete from CARDMEMBER" + " where _id = "+ (id1 + 1) +";";
+                                String sql = "delete from CARDMEMBER" + " where op_name = '"+ c1.getString(c1.getColumnIndexOrThrow("op_name")) + "' and ophone = '" + c1.getString(c1.getColumnIndexOrThrow("ophone")) + "';";
                                 System.out.println("sql delete:" + sql);
                                 try {
                                     sqLiteDatabase.execSQL(sql);

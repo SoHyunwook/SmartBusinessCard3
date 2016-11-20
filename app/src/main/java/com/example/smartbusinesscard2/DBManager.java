@@ -21,7 +21,7 @@ public class DBManager extends SQLiteOpenHelper {
         db.execSQL("CREATE TABLE USER (_id INTEGER PRIMARY KEY AUTOINCREMENT, u_name TEXT, c_name Text," +
                 "phone TEXT, email TEXT, fax TEXT, position TEXT);");
         db.execSQL("CREATE TABLE CARDMEMBER (_id INTEGER PRIMARY KEY AUTOINCREMENT, p_name TEXT, c_name TEXT, " +
-                "phone TEXT, email TEXT, fax TEXT, position TEXT);");
+                "phone TEXT, email TEXT, fax TEXT, position TEXT, op_name TEXT, ophone TEXT);");
         db.execSQL("CREATE TABLE EMAIL(_id INTEGER PRIMARY KEY AUTOINCREMENT, content TEXT, date TEXT," +
                 "to_whom TEXT);");
     }

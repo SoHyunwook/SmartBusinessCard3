@@ -2,24 +2,115 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent" android:layout_height="match_parent">
 
-    <TextView
-        android:layout_width="wrap_content"
+    <RadioGroup
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:text="Name"
-        android:id="@+id/name_label5"
-        android:layout_marginTop="33dp"
-        android:layout_alignParentTop="true"
-        android:layout_alignLeft="@+id/positionTextView5"
-        android:layout_alignStart="@+id/positionTextView5" />
+        android:orientation="horizontal"
+        android:id="@+id/radioGroup6">
+
+        <RadioButton
+            android:id="@+id/option19"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Name"
+            android:checked="false"
+            android:textSize="10dp" />
+
+        <RadioButton
+            android:id="@+id/option20"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Position"
+            android:checked="false"
+            android:textSize="10dp" />
+
+        <RadioButton
+            android:id="@+id/option21"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Company Name"
+            android:checked="false"
+            android:textSize="10dp" />
+
+    </RadioGroup>
+
+    <RadioGroup
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:id="@+id/radioGroup7"
+        android:layout_below="@+id/positionTextView5"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true">
+
+        <RadioButton
+            android:id="@+id/option22"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Name"
+            android:checked="false"
+            android:textSize="10dp" />
+
+        <RadioButton
+            android:id="@+id/option23"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Position"
+            android:checked="false"
+            android:textSize="10dp" />
+
+        <RadioButton
+            android:id="@+id/option24"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Company Name"
+            android:checked="false"
+            android:textSize="10dp" />
+
+    </RadioGroup>
+
+    <RadioGroup
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:id="@+id/radioGroup8"
+        android:layout_below="@+id/nameTextView5"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true">
+
+        <RadioButton
+            android:id="@+id/option25"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Name"
+            android:checked="false"
+            android:textSize="10dp" />
+
+        <RadioButton
+            android:id="@+id/option26"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Position"
+            android:checked="false"
+            android:textSize="10dp" />
+
+        <RadioButton
+            android:id="@+id/option27"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Company Name"
+            android:checked="false"
+            android:textSize="10dp" />
+
+    </RadioGroup>
 
     <TextView
-        android:layout_width="wrap_content"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:text="Company Name"
-        android:id="@+id/companyName_label5"
-        android:layout_below="@+id/positionTextView5"
-        android:layout_alignLeft="@+id/phon_label5"
-        android:layout_alignStart="@+id/phon_label5" />
+        android:id="@+id/nameTextView5"
+        android:layout_below="@+id/radioGroup6"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -27,76 +118,72 @@
         android:text="Phone Number"
         android:id="@+id/phon_label5"
         android:layout_below="@+id/comNameTextView5"
-        android:layout_alignLeft="@+id/fax_label5"
-        android:layout_alignStart="@+id/fax_label5" />
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Fax Number"
         android:id="@+id/fax_label5"
+        android:layout_marginTop="22dp"
         android:layout_below="@+id/phoneTextView5"
-        android:layout_alignLeft="@+id/email_label5"
-        android:layout_alignStart="@+id/email_label5" />
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="E-mail"
         android:id="@+id/email_label5"
+        android:layout_marginTop="30dp"
         android:layout_below="@+id/faxTextView5"
-        android:layout_marginLeft="31dp"
-        android:layout_marginStart="31dp" />
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
 
     <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/nameTextView5"
-        android:layout_below="@+id/name_label5"
-        android:layout_alignLeft="@+id/name_label5"
-        android:layout_alignStart="@+id/name_label5" />
-
-    <TextView
-        android:layout_width="match_parent"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:id="@+id/comNameTextView5"
-        android:layout_below="@+id/companyName_label5"
-        android:layout_alignLeft="@+id/phon_label5"
-        android:layout_alignStart="@+id/phon_label5" />
+        android:layout_below="@+id/radioGroup7"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
 
     <TextView
-        android:layout_width="match_parent"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:id="@+id/phoneTextView5"
         android:layout_below="@+id/phon_label5"
-        android:layout_alignLeft="@+id/phon_label5"
-        android:layout_alignStart="@+id/phon_label5" />
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
 
     <TextView
-        android:layout_width="match_parent"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:id="@+id/faxTextView5"
         android:layout_below="@+id/fax_label5"
-        android:layout_alignLeft="@+id/email_label5"
-        android:layout_alignStart="@+id/email_label5" />
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
 
     <TextView
-        android:layout_width="match_parent"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:id="@+id/emailTextView5"
         android:layout_below="@+id/email_label5"
-        android:layout_alignLeft="@+id/email_label5"
-        android:layout_alignStart="@+id/email_label5" />
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Edit"
         android:id="@+id/informEditBtn5"
-        android:layout_marginBottom="68dp"
-        android:layout_alignParentBottom="true"
-        android:layout_toRightOf="@+id/fax_label5"
-        android:layout_toEndOf="@+id/fax_label5" />
+        android:layout_below="@+id/emailTextView5"
+        android:layout_toRightOf="@+id/phon_label5"
+        android:layout_toEndOf="@+id/phon_label5"
+        android:layout_marginLeft="22dp"
+        android:layout_marginStart="22dp"
+        android:layout_marginTop="58dp" />
 
     <Button
         android:layout_width="wrap_content"
@@ -108,19 +195,12 @@
         android:layout_toEndOf="@+id/informEditBtn5" />
 
     <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Position"
-        android:id="@+id/position_label5"
-        android:layout_below="@+id/nameTextView5"
-        android:layout_alignLeft="@+id/companyName_label5"
-        android:layout_alignStart="@+id/companyName_label5" />
-
-    <TextView
-        android:layout_width="match_parent"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:id="@+id/positionTextView5"
-        android:layout_below="@+id/position_label5"
-        android:layout_alignLeft="@+id/companyName_label5"
-        android:layout_alignStart="@+id/companyName_label5" />
+        android:layout_marginTop="37dp"
+        android:layout_below="@+id/nameTextView5"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
 </RelativeLayout>

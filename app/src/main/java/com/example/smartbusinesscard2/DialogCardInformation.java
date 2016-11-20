@@ -7,6 +7,8 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 
 /**
@@ -18,6 +20,9 @@ public class DialogCardInformation extends Activity implements View.OnClickListe
     TextView nameTv, conameTv, emailTv, telTv, faxTv, posTv;
     DBManager dbManager;
     SQLiteDatabase sqLiteDatabase;
+    RadioGroup rg, rg1, rg2;
+    RadioButton rb, rb1, rb2;
+    int id, id1, id2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,6 +33,8 @@ public class DialogCardInformation extends Activity implements View.OnClickListe
 
         findViewById(R.id.informEditBtn).setOnClickListener(this);
         findViewById(R.id.saveBtn).setOnClickListener(this);
+
+
 
         nameTv = (TextView)findViewById(R.id.nameTextView);
         String name = intent.getStringExtra("pname");
@@ -52,6 +59,10 @@ public class DialogCardInformation extends Activity implements View.OnClickListe
         posTv = (TextView)findViewById(R.id.positionTextView);
         String pos = intent.getStringExtra("position");
         posTv.setText(String.format("%s", pos));
+
+        rg = (RadioGroup)findViewById(R.id.radioGroup);
+        rg1 = (RadioGroup)findViewById(R.id.radioGroup1);
+        rg2 = (RadioGroup)findViewById(R.id.radioGroup2);
     }
 
     public void onClick(View v) {
@@ -69,14 +80,36 @@ public class DialogCardInformation extends Activity implements View.OnClickListe
                 startActivityForResult(intent1, 1);
                 break;
             case R.id.saveBtn:
+                id = rg.getCheckedRadioButtonId();
+                System.out.println("rg id:" + id);
+                rb = (RadioButton)findViewById(id);
+                id1 = rg1.getCheckedRadioButtonId();
+                rb1 = (RadioButton)findViewById(id1);
+                id2 = rg2.getCheckedRadioButtonId();
+                rb2 = (RadioButton)findViewById(id2);
                 dbOpen();
                 ContentValues values = new ContentValues();
-                values.put("u_name", nameTv.getText().toString());
-                values.put("c_name", conameTv.getText().toString());
+                if(rb.getText().toString().equals("Name"))
+                    values.put("u_name", nameTv.getText().toString());
+                if(rb.getText().toString().equals("Position"))
+                    values.put("position", nameTv.getText().toString());
+                if(rb.getText().toString().equals("Company Name"))
+                    values.put("c_name", nameTv.getText().toString());
+                if(rb1.getText().toString().equals("Name"))
+                    values.put("u_name", conameTv.getText().toString());
+                if(rb1.getText().toString().equals("Position"))
+                    values.put("position", conameTv.getText().toString());
+                if(rb1.getText().toString().equals("Company Name"))
+                    values.put("c_name", conameTv.getText().toString());
+                if(rb2.getText().toString().equals("Name"))
+                    values.put("u_name", posTv.getText().toString());
+                if(rb2.getText().toString().equals("Position"))
+                    values.put("position", posTv.getText().toString());
+                if(rb2.getText().toString().equals("Company Name"))
+                    values.put("c_name", posTv.getText().toString());
                 values.put("phone", telTv.getText().toString());
                 values.put("email", emailTv.getText().toString());
                 values.put("fax", faxTv.getText().toString());
-                values.put("position", posTv.getText().toString());
                 try {
                     sqLiteDatabase.insert("USER", null, values);
                 } catch (SQLiteException e) {
