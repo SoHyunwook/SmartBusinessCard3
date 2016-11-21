@@ -1,8 +1,5 @@
 package com.example.smartbusinesscard2;
 
-/**
- * Created by 현욱 on 2016-11-09.
- */
 import android.app.AlarmManager;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -70,16 +67,19 @@ import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 
+/**
+ * Created by yi_te on 2016-11-09.
+ */
 
 public class EmailActivity extends Activity implements DatePicker.OnDateChangedListener, TimePicker.OnTimeChangedListener {
     AlarmManager mManager;
-    private GregorianCalendar mCalendar; // ?ㅼ젙 ?쇱떆
-    private DatePicker mDate; // ?쇱옄 ?ㅼ젙 ?대옒??
-    private TimePicker mTime; // ?쒖옉 ?ㅼ젙 ?대옒??
-    private NotificationManager mNotification; // ?듭? 愿??硫ㅻ쾭 蹂??
+    private GregorianCalendar mCalendar;
+    private DatePicker mDate;
+    private TimePicker mTime;
+    private NotificationManager mNotification;
     static long result;
-    EditText subject, message;
-    static String s_subject, s_message;
+    EditText subject, message, address;
+    static String s_subject, s_message, s_address, s_time;
 
     DBManager dbManager;
     SQLiteDatabase sqLiteDatabase;
@@ -90,14 +90,13 @@ public class EmailActivity extends Activity implements DatePicker.OnDateChangedL
 
         subject = (EditText)findViewById(R.id.subject);
         message = (EditText)findViewById(R.id.message);
+        address = (EditText)findViewById(R.id.mail);
 
-        mNotification = (NotificationManager) getSystemService(NOTIFICATION_SERVICE); // ?듭? 留ㅻ땲?瑜?痍⑤뱷
-        mManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE); // ?뚮엺 留ㅻ땲?瑜?痍⑤뱷
-        mCalendar = new GregorianCalendar(); // ?꾩옱 ?쒓컖??痍⑤뱷
-        Log.i("HelloAlarmActivity", mCalendar.getTime().toString());
-        System.out.println("?꾩옱?쒓컙" + mCalendar.getTimeInMillis());
+        mNotification = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+        mManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+        mCalendar = new GregorianCalendar();
+        Log.i("현재시간", mCalendar.getTime().toString());
 
-        //?쇱떆 ?ㅼ젙 ?대옒?ㅻ줈 ?꾩옱 ?쒓컖???ㅼ젙
         mDate = (DatePicker) findViewById(R.id.date_picker);
         mDate.init(mCalendar.get(Calendar.YEAR), mCalendar.get(Calendar.MONTH), mCalendar.get(Calendar.DAY_OF_MONTH), this);
         mTime = (TimePicker) findViewById(R.id.time_picker);
@@ -111,11 +110,18 @@ public class EmailActivity extends Activity implements DatePicker.OnDateChangedL
             public void onClick(View v) {
                 s_subject = subject.getText().toString();
                 s_message = message.getText().toString();
+                s_address = address.getText().toString();
+                result = setTime();
+                s_time = mCalendar.getTime().toString();
 
                 dbOpen();
                 ContentValues values = new ContentValues();
-                values.put("subject", s_subject);
-                values.put("message", s_message);
+                values.put("subject", subject.getText().toString());
+                values.put("message", message.getText().toString());
+                values.put("show_time", s_time);
+                values.put("time", result);
+                values.put("to_whom", address.getText().toString());
+                System.out.println("msg = "+ message.getText().toString());
                 try {
                     sqLiteDatabase.insert("EMAIL", null, values);
                     System.out.println("success");
@@ -123,7 +129,6 @@ public class EmailActivity extends Activity implements DatePicker.OnDateChangedL
                     System.out.println("insert error");
                 }
                 dbClose();
-                result = setTime();
                 System.out.println("result = " + result);
                 mManager.set(AlarmManager.RTC_WAKEUP, result, pendingIntent());
                 finish();
@@ -138,30 +143,17 @@ public class EmailActivity extends Activity implements DatePicker.OnDateChangedL
     }
 
     private long setTime() {
-        System.out.println("?몄젣?쒓컙 = " + mCalendar.getTimeInMillis());
-        System.out.println("?몄젣?쒓컙 = " + mCalendar.getTime().toString());
         return mCalendar.getTimeInMillis();
     }
 
-    //?쇱옄 ?ㅼ젙 ?대옒?ㅼ쓽 ?곹깭蹂??由ъ뒪??
     public void onDateChanged(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
         mCalendar.set(year, monthOfYear, dayOfMonth);
-        Log.i("datechange", mCalendar.getTime().toString());
-        Date date = mCalendar.getTime();
-        System.out.println("date = " + date);
-        System.out.println("?좎쭨 = " + mCalendar.getTimeInMillis());
     }
 
-    //?쒓컖 ?ㅼ젙 ?대옒?ㅼ쓽 ?곹깭蹂??由ъ뒪??
     public void onTimeChanged(TimePicker view, int hourOfDay, int minute) {
         mCalendar.set(mDate.getYear(), mDate.getMonth(), mDate.getDayOfMonth(), hourOfDay, minute);
-        Log.i("timechange", mCalendar.getTime().toString());
-        Date time = mCalendar.getTime();
-        System.out.println("time = " + time);
-        System.out.println("?쒓컙 = " + mCalendar.getTimeInMillis());
     }
 
-    //?뚮엺???ㅼ젙 ?쒓컖??諛쒖깮?섎뒗 ?명뀗???묒꽦
     public PendingIntent pendingIntent() {
         Intent i = new Intent(EmailActivity.this, APIConnected.class);
         PendingIntent pi = PendingIntent.getActivity(EmailActivity.this, 0, i, 0);
@@ -181,5 +173,4 @@ public class EmailActivity extends Activity implements DatePicker.OnDateChangedL
             }
         }
     }
-
 }

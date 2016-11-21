@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Subject"
+        android:id="@+id/subject1"
+        android:layout_marginTop="33dp"
+        android:layout_marginLeft="33dp"
+        android:layout_alignParentTop="true"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="33dp"
+        android:id="@+id/subject2"
+        android:layout_alignLeft="@+id/subject1"
+        android:layout_alignStart="@+id/subject1"
+        android:layout_below="@+id/subject1" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Email"
+        android:id="@+id/email1"
+        android:layout_below="@+id/subject2"
+        android:layout_alignLeft="@+id/subject2"
+        android:layout_alignStart="@+id/subject2" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="33dp"
+        android:id="@+id/email2"
+        android:layout_alignLeft="@+id/email1"
+        android:layout_alignStart="@+id/email1"
+        android:layout_below="@+id/email1" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Message"
+        android:id="@+id/message1"
+        android:layout_below="@+id/email2"
+        android:layout_alignLeft="@+id/email2"
+        android:layout_alignStart="@+id/email2" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="33dp"
+        android:id="@+id/message2"
+        android:layout_alignLeft="@+id/message1"
+        android:layout_alignStart="@+id/message1"
+        android:layout_below="@+id/message1" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Time"
+        android:id="@+id/time1"
+        android:layout_below="@+id/message2"
+        android:layout_alignLeft="@+id/message2"
+        android:layout_alignStart="@+id/message2" />
+
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="33dp"
+        android:id="@+id/time2"
+        android:layout_alignLeft="@+id/time1"
+        android:layout_alignStart="@+id/time1"
+        android:layout_below="@+id/time1" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Edit"
+        android:id="@+id/edit_b"
+        android:layout_marginBottom="67dp"
+        android:layout_marginLeft="30dp"
+        android:layout_alignParentBottom="true"/>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="OK"
+        android:id="@+id/ok_b"
+        android:layout_alignTop="@+id/edit_b"
+        android:layout_toRightOf="@+id/edit_b"
+        android:layout_toEndOf="@+id/edit_b"
+        android:layout_marginLeft="20dp"
+        android:layout_marginStart="20dp" />
+
+</RelativeLayout>

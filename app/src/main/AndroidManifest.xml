@@ -63,6 +63,8 @@
         <activity android:name=".APIConnected"
             android:theme="@style/Theme.AppCompat.Dialog"></activity>
         <activity android:name=".MailCheck"></activity>
+        <activity android:name=".PrintEmail"></activity>
+        <activity android:name=".EditEmail"></activity>
 
         <!-- ATTENTION: This was auto-generated to add Google Play services to your project for
              App Indexing.  See https://g.co/AppIndexing/AndroidStudio for more information. -->

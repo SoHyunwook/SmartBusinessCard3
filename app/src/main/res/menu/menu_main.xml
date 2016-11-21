@@ -21,6 +21,10 @@
                 android:id="@+id/action_myinfo"
                 android:title="My Information"
                 app:showAsAction="always|withText"/>
+            <item
+                android:id="@+id/action_mailcheck"
+                android:title="Email Check"
+                app:showAsAction="always|withText"/>
         </menu>
     </item>
 </menu>

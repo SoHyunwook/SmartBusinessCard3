@@ -204,6 +204,7 @@ public class MainActivity extends AppCompatActivity {
 
         adapter = new CardmemberAdapter(this, R.layout.card, data);
         list.setAdapter(adapter);
+        adapter.notifyDataSetChanged();
 
         list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -330,6 +331,10 @@ public class MainActivity extends AppCompatActivity {
                 break;
             case R.id.action_myinfo:
                 startActivity(new Intent(this, MyInformation.class));
+                break;
+            case R.id.action_mailcheck:
+                Intent i = new Intent(MainActivity.this, MailCheck.class);
+                startActivity(i);
                 break;
             default:
                 return super.onOptionsItemSelected(item);
