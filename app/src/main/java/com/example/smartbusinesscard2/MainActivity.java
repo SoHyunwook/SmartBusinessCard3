@@ -65,6 +65,7 @@ public class MainActivity extends AppCompatActivity
     private GoogleApiClient client;
 
     private void inspectFromBitmap(Bitmap bitmap) {
+        System.out.println("inspectFromBitmap");
         Intent intent = new Intent(MainActivity.this,PrintInformation.class);
         baseAPI.setImage(bitmap);
         String text = baseAPI.getUTF8Text();
@@ -104,6 +105,7 @@ public class MainActivity extends AppCompatActivity
         intent.putExtra("comname", strarray[2]);
         bitmap = null;
         startActivityForResult(intent, 1);
+        return;
     }
 
     private void inspect1(Uri uri) {
@@ -432,11 +434,13 @@ public class MainActivity extends AppCompatActivity
             intent.setAction(MediaStore.ACTION_IMAGE_CAPTURE);
             intent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
             startActivityForResult(intent, REQUEST_CAMERA);
+            return true;
         } else if (id == R.id.nav_gallery) {
             Intent intent1 = new Intent();
             intent1.setType("image/*");
             intent1.setAction(Intent.ACTION_GET_CONTENT);
             startActivityForResult(intent1, REQUEST_GALLERY);
+            return true;
         } else if (id == R.id.nav_manage) {
             startActivity(new Intent(this, MyInformation.class));
         } else if (id == R.id.nav_share) {

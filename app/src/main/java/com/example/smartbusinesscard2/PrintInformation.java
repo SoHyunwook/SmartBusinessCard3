@@ -33,6 +33,7 @@ public class PrintInformation extends AppCompatActivity implements View.OnClickL
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        System.out.println("PrintInformation");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.print_information);
 

@@ -11,14 +11,4 @@
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
         />
-
-    <TextView
-        android:id="@+id/text"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center_horizontal"
-        android:text="SmartBusinessCard"
-        android:textSize="52sp"
-        android:textStyle="normal|bold|italic" />
-
 </LinearLayout>
