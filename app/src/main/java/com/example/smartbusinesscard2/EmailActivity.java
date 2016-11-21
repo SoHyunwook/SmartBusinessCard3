@@ -88,6 +88,11 @@ public class EmailActivity extends Activity implements DatePicker.OnDateChangedL
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_email);
 
+        FontClass.setDefaultFont(this, "DEFAULT", "NotoSans-Regular.ttf");
+        FontClass.setDefaultFont(this, "MONOSPACE", "NotoSans-Regular.ttf");
+        FontClass.setDefaultFont(this, "SERIF", "NotoSans-Regular.ttf");
+        FontClass.setDefaultFont(this, "SANS_SERIF", "NotoSans-Bold.ttf");
+
         subject = (EditText)findViewById(R.id.subject);
         message = (EditText)findViewById(R.id.message);
         address = (EditText)findViewById(R.id.mail);

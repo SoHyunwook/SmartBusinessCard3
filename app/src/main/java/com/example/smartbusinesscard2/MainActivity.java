@@ -22,7 +22,9 @@ import android.view.MenuItem;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.Spinner;
 
 import com.google.android.gms.appindexing.Action;
 import com.google.android.gms.appindexing.AppIndex;
@@ -166,6 +168,29 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         setSupportActionBar((Toolbar) findViewById(R.id.toolbar));
         System.out.println("MainActivity onCreate()");
+
+        FontClass.setDefaultFont(this, "DEFAULT", "NotoSans-Regular.ttf");
+        FontClass.setDefaultFont(this, "MONOSPACE", "NotoSans-Regular.ttf");
+        FontClass.setDefaultFont(this, "SERIF", "NotoSans-Regular.ttf");
+        FontClass.setDefaultFont(this, "SANS_SERIF", "NotoSans-Bold.ttf");
+
+        String[] str = getResources().getStringArray(R.array.spinnerArray);
+        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, str);
+        Spinner spi = (Spinner)findViewById(R.id.spinner);
+        spi.setAdapter(arrayAdapter);
+        spi.setOnItemSelectedListener(
+                new AdapterView.OnItemSelectedListener() {
+                    @Override
+                    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+
+                    }
+
+                    @Override
+                    public void onNothingSelected(AdapterView<?> parent) {
+
+                    }
+                }
+        );
 
         dbOpen();
         //dbManager = new DBManager(this, "myDB.db", null, 1);

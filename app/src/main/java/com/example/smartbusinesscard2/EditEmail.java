@@ -23,6 +23,11 @@ public class EditEmail extends Activity implements View.OnClickListener {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.email_edit);
 
+        FontClass.setDefaultFont(this, "DEFAULT", "NotoSans-Regular.ttf");
+        FontClass.setDefaultFont(this, "MONOSPACE", "NotoSans-Regular.ttf");
+        FontClass.setDefaultFont(this, "SERIF", "NotoSans-Regular.ttf");
+        FontClass.setDefaultFont(this, "SANS_SERIF", "NotoSans-Bold.ttf");
+
         findViewById(R.id.save_b).setOnClickListener(this);
         findViewById(R.id.cancle_b).setOnClickListener(this);
 

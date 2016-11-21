@@ -40,6 +40,10 @@ public class AppUserLogin extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        FontClass.setDefaultFont(this, "DEFAULT", "NotoSans-Regular.ttf");
+        FontClass.setDefaultFont(this, "MONOSPACE", "NotoSans-Regular.ttf");
+        FontClass.setDefaultFont(this, "SERIF", "NotoSans-Regular.ttf");
+        FontClass.setDefaultFont(this, "SANS_SERIF", "NotoSans-Bold.ttf");
         try {
             System.out.println("AppUserLogin onCreate");
             dbOpen();

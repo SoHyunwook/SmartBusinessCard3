@@ -18,6 +18,11 @@ public class DialogCardEdit extends Activity implements View.OnClickListener {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.dialog_card_edit);
 
+        FontClass.setDefaultFont(this, "DEFAULT", "NotoSans-Regular.ttf");
+        FontClass.setDefaultFont(this, "MONOSPACE", "NotoSans-Regular.ttf");
+        FontClass.setDefaultFont(this, "SERIF", "NotoSans-Regular.ttf");
+        FontClass.setDefaultFont(this, "SANS_SERIF", "NotoSans-Bold.ttf");
+
         findViewById(R.id.confirmBtn).setOnClickListener(this);
         findViewById(R.id.cancleBtn).setOnClickListener(this);
 

@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="spinnerArray">
+        <item>[정렬]</item>
+        <item>회사명</item>
+        <item>직위</item>
+    </string-array>
+</resources>

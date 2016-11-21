@@ -26,6 +26,11 @@ public class MyInformation extends AppCompatActivity implements View.OnClickList
         super.onCreate(savedInstanceState);
         setContentView(R.layout.my_information);
 
+        FontClass.setDefaultFont(this, "DEFAULT", "NotoSans-Regular.ttf");
+        FontClass.setDefaultFont(this, "MONOSPACE", "NotoSans-Regular.ttf");
+        FontClass.setDefaultFont(this, "SERIF", "NotoSans-Regular.ttf");
+        FontClass.setDefaultFont(this, "SANS_SERIF", "NotoSans-Bold.ttf");
+
         findViewById(R.id.informEditBtn2).setOnClickListener(this);
         findViewById(R.id.backBtn).setOnClickListener(this);
         findViewById(R.id.saveBtn2).setOnClickListener(this);

@@ -30,8 +30,14 @@ public class SplashScreen extends Activity {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.splash);
+
+        FontClass.setDefaultFont(this, "DEFAULT", "NotoSans-Regular.ttf");
+        FontClass.setDefaultFont(this, "MONOSPACE", "NotoSans-Regular.ttf");
+        FontClass.setDefaultFont(this, "SERIF", "NotoSans-Regular.ttf");
+        FontClass.setDefaultFont(this, "SANS_SERIF", "NotoSans-Bold.ttf");
+
         ImageView gyroView = (ImageView) findViewById(R.id.gyro);
-        gyroView.setBackgroundResource(R.drawable.gyro_animation);
+        gyroView.setBackgroundResource(R.drawable.logo1);
         AnimationDrawable gyroAnimation = (AnimationDrawable) gyroView.getBackground();
 
         gyroAnimation.start();

@@ -29,6 +29,11 @@ public class DialogCardInformation extends Activity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.dialog_card_information);
 
+        FontClass.setDefaultFont(this, "DEFAULT", "NotoSans-Regular.ttf");
+        FontClass.setDefaultFont(this, "MONOSPACE", "NotoSans-Regular.ttf");
+        FontClass.setDefaultFont(this, "SERIF", "NotoSans-Regular.ttf");
+        FontClass.setDefaultFont(this, "SANS_SERIF", "NotoSans-Bold.ttf");
+
         Intent intent = getIntent();
 
         findViewById(R.id.informEditBtn).setOnClickListener(this);

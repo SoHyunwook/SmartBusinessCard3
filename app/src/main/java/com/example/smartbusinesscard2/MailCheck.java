@@ -32,6 +32,11 @@ public class MailCheck extends AppCompatActivity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.check_mail);
 
+        FontClass.setDefaultFont(this, "DEFAULT", "NotoSans-Regular.ttf");
+        FontClass.setDefaultFont(this, "MONOSPACE", "NotoSans-Regular.ttf");
+        FontClass.setDefaultFont(this, "SERIF", "NotoSans-Regular.ttf");
+        FontClass.setDefaultFont(this, "SANS_SERIF", "NotoSans-Bold.ttf");
+
         dbOpen();
         list = (ListView)findViewById(R.id.listview2);
         cursor = sqLiteDatabase.query("EMAIL", null, null, null, null, null, null);
