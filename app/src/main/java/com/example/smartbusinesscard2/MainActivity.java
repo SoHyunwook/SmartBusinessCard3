@@ -13,7 +13,10 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
 import android.util.DisplayMetrics;
@@ -37,17 +40,17 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 
-/**
- * Created by 현욱 on 2016-11-03.
- * 명함들이 syrup어플처럼 보여져야하는 java파일
- */
+import android.support.v4.view.GravityCompat;
+import android.widget.TextView;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity
+        implements NavigationView.OnNavigationItemSelectedListener {
 
+    TextView nameTv, emailTv;
     private Uri imageUri;
-    DBManager dbManager;
-    SQLiteDatabase sqLiteDatabase;
-    Cursor cursor;
+    DBManager dbManager, dbManager2;
+    SQLiteDatabase sqLiteDatabase, sqLiteDatabase2;
+    Cursor cursor, cursor2;
     ListView list;
     CardmemberAdapter adapter;
     ArrayList<Cardmember> data = null;
@@ -166,8 +169,8 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        setSupportActionBar((Toolbar) findViewById(R.id.toolbar));
-        System.out.println("MainActivity onCreate()");
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
 
         FontClass.setDefaultFont(this, "DEFAULT", "NotoSans-Regular.ttf");
         FontClass.setDefaultFont(this, "MONOSPACE", "NotoSans-Regular.ttf");
@@ -226,6 +229,30 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        drawer.setDrawerListener(toggle);
+        toggle.syncState();
+
+        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navigationView.setNavigationItemSelectedListener(this);
+        View nav_header_view = navigationView.getHeaderView(0);
+
+        nameTv = (TextView)nav_header_view.findViewById(R.id.nav_name);
+        emailTv = (TextView)nav_header_view.findViewById(R.id.nav_email);
+
+        dbManager2 = new DBManager(this, "myDB.db", null, 1);
+        sqLiteDatabase2 = dbManager2.getReadableDatabase();
+        cursor2 = sqLiteDatabase2.query("USER", null, null, null, null, null, null);
+        cursor2.moveToFirst();
+        nameTv.setText(cursor2.getString(1).toString());
+        emailTv.setText(cursor2.getString(4).toString());
+
+        cursor2.close();
+        sqLiteDatabase2.close();
+        dbManager2.close();
 
         adapter = new CardmemberAdapter(this, R.layout.card, data);
         list.setAdapter(adapter);
@@ -324,47 +351,14 @@ public class MainActivity extends AppCompatActivity {
         System.out.println("end of MainActiity oncreate");
     }
 
-
-
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.action_camera:
-                String filename = System.currentTimeMillis() + ".jpg";
-
-                ContentValues values = new ContentValues();
-                values.put(MediaStore.Images.Media.TITLE, filename);
-                values.put(MediaStore.Images.Media.MIME_TYPE, "image/jpeg");
-                imageUri = getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);
-
-                Intent intent = new Intent();
-                intent.setAction(MediaStore.ACTION_IMAGE_CAPTURE);
-                intent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
-                startActivityForResult(intent, REQUEST_CAMERA);
-                break;
-            case R.id.action_album:
-                Intent intent1 = new Intent();
-                intent1.setType("image/*");
-                intent1.setAction(Intent.ACTION_GET_CONTENT);
-                startActivityForResult(intent1, REQUEST_GALLERY);
-                break;
-            case R.id.action_myinfo:
-                startActivity(new Intent(this, MyInformation.class));
-                break;
-            case R.id.action_mailcheck:
-                Intent i = new Intent(MainActivity.this, MailCheck.class);
-                startActivity(i);
-                break;
-            default:
-                return super.onOptionsItemSelected(item);
+    public void onBackPressed() {
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        if (drawer.isDrawerOpen(GravityCompat.START)) {
+            drawer.closeDrawer(GravityCompat.START);
+        } else {
+            super.onBackPressed();
         }
-        return super.onOptionsItemSelected(item);
     }
 
     @Override
@@ -418,5 +412,43 @@ public class MainActivity extends AppCompatActivity {
                 sqLiteDatabase.close();
             }
         }
+    }
+
+    @SuppressWarnings("StatementWithEmptyBody")
+    @Override
+    public boolean onNavigationItemSelected(MenuItem item) {
+        // Handle navigation view item clicks here.
+        int id = item.getItemId();
+
+        if (id == R.id.nav_camera) {
+            String filename = System.currentTimeMillis() + ".jpg";
+
+            ContentValues values = new ContentValues();
+            values.put(MediaStore.Images.Media.TITLE, filename);
+            values.put(MediaStore.Images.Media.MIME_TYPE, "image/jpeg");
+            imageUri = getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);
+
+            Intent intent = new Intent();
+            intent.setAction(MediaStore.ACTION_IMAGE_CAPTURE);
+            intent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
+            startActivityForResult(intent, REQUEST_CAMERA);
+        } else if (id == R.id.nav_gallery) {
+            Intent intent1 = new Intent();
+            intent1.setType("image/*");
+            intent1.setAction(Intent.ACTION_GET_CONTENT);
+            startActivityForResult(intent1, REQUEST_GALLERY);
+        } else if (id == R.id.nav_manage) {
+            startActivity(new Intent(this, MyInformation.class));
+        } else if (id == R.id.nav_share) {
+            Intent i = new Intent(MainActivity.this, MailCheck.class);
+            startActivity(i);
+        } else if (id == R.id.nav_send) {
+            Intent intent = new Intent(MainActivity.this, EmailActivity.class);
+            startActivity(intent);
+        }
+
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        drawer.closeDrawer(GravityCompat.START);
+        return true;
     }
 }
