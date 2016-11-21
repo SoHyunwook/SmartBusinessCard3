@@ -38,9 +38,9 @@ public class SplashScreen extends Activity {
 
         ImageView gyroView = (ImageView) findViewById(R.id.gyro);
         gyroView.setBackgroundResource(R.drawable.logo1);
-        AnimationDrawable gyroAnimation = (AnimationDrawable) gyroView.getBackground();
+        //AnimationDrawable gyroAnimation = (AnimationDrawable) gyroView.getBackground();
 
-        gyroAnimation.start();
+        //gyroAnimation.start();
         StartAnimations();
 
         textView = (TextView) findViewById(R.id.text);
