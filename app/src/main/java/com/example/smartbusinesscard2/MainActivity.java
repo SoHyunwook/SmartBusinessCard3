@@ -18,6 +18,8 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.DisplayMetrics;
 import android.view.Menu;
@@ -51,9 +53,10 @@ public class MainActivity extends AppCompatActivity
     DBManager dbManager, dbManager2;
     SQLiteDatabase sqLiteDatabase, sqLiteDatabase2;
     Cursor cursor, cursor2;
-    ListView list;
+    RecyclerView list;
     CardmemberAdapter adapter;
-    ArrayList<Cardmember> data = null;
+    LinearLayoutManager linearLayoutManager;
+    ArrayList<Cardmember> data1 = null;
     private static final int REQUEST_GALLERY = 0;
     private static final int REQUEST_CAMERA = 1;
 
@@ -111,6 +114,7 @@ public class MainActivity extends AppCompatActivity
     private void inspect1(Uri uri) {
         InputStream is = null;
         try {
+            System.out.println("inspect1 start");
             is = getContentResolver().openInputStream(uri);
             BitmapFactory.Options options = new BitmapFactory.Options();
             options.inPreferredConfig = Bitmap.Config.ARGB_8888;
@@ -118,11 +122,14 @@ public class MainActivity extends AppCompatActivity
             options.inScreenDensity = DisplayMetrics.DENSITY_LOW;
             Bitmap bitmap = BitmapFactory.decodeStream(is, null, options);
             inspectFromBitmap(bitmap);
+            System.out.println("inspect1 before end");
+            return;
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } finally {
             if (is != null) {
                 try {
+                    System.out.println("is.close()");
                     is.close();
                 } catch (IOException e) {
                 }
@@ -150,6 +157,31 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        System.out.println("onActivityResult Start");
+
+        dbOpen();
+        cursor = sqLiteDatabase.query("CARDMEMBER", null, null, null, null, null, null);
+        data1 = new ArrayList<Cardmember>();
+        Cardmember cardmember;
+        while(cursor.moveToNext()) {
+            cardmember = new Cardmember(cursor.getInt(0), cursor.getString(1), cursor.getString(2), cursor.getString(3), cursor.getString(4), cursor.getString(5), cursor.getString(6), cursor.getString(7), cursor.getString(8));
+            cardmember._id = cursor.getInt(0);
+            cardmember.p_name = cursor.getString(1);
+            cardmember.c_name = cursor.getString(2);
+            cardmember.phone = cursor.getString(3);
+            cardmember.email = cursor.getString(4);
+            cardmember.fax = cursor.getString(5);
+            cardmember.position = cursor.getString(6);
+            cardmember.op_name = cursor.getString(7);
+            cardmember.ophone = cursor.getString(8);
+            data1.add(cardmember);
+        }
+        cursor.close();
+        dbClose();
+        //sqLiteDatabase.close();
+        dbManager.close();
+
+
         switch (requestCode) {
             case REQUEST_GALLERY:
                 if (resultCode == RESULT_OK) {
@@ -158,7 +190,9 @@ public class MainActivity extends AppCompatActivity
                 break;
             case REQUEST_CAMERA:
                 if (imageUri != null) {
+                    System.out.println("onActivityResult's REQUEST_CAMERA");
                     inspect1(imageUri);
+                    return;
                 }
                 break;
             default:
@@ -199,15 +233,19 @@ public class MainActivity extends AppCompatActivity
 
         dbOpen();
         //dbManager = new DBManager(this, "myDB.db", null, 1);
-        list = (ListView)findViewById(R.id.listView);
+        linearLayoutManager = new LinearLayoutManager(getApplicationContext());
+        list = (RecyclerView)findViewById(R.id.listView);
+        list.setHasFixedSize(true);
+        list.setLayoutManager(linearLayoutManager);
 
         //sqLiteDatabase = dbManager.getReadableDatabase();
         cursor = sqLiteDatabase.query("CARDMEMBER", null, null, null, null, null, null);
-        data = new ArrayList<Cardmember>();
+        data1 = new ArrayList<Cardmember>();
         Cardmember cardmember;
         while(cursor.moveToNext()) {
-            cardmember = new Cardmember();
+            cardmember = new Cardmember(cursor.getInt(0), cursor.getString(1), cursor.getString(2),cursor.getString(3),cursor.getString(4),cursor.getString(5),cursor.getString(6),cursor.getString(7),cursor.getString(8));
             cardmember._id = cursor.getInt(0);
+            System.out.println("_id is : " + cardmember._id);
             cardmember.p_name = cursor.getString(1);
             cardmember.c_name = cursor.getString(2);
             cardmember.phone = cursor.getString(3);
@@ -216,7 +254,7 @@ public class MainActivity extends AppCompatActivity
             cardmember.position = cursor.getString(6);
             cardmember.op_name = cursor.getString(7);
             cardmember.ophone = cursor.getString(8);
-            data.add(cardmember);
+            data1.add(cardmember);
         }
         cursor.close();
         dbClose();
@@ -256,10 +294,42 @@ public class MainActivity extends AppCompatActivity
         sqLiteDatabase2.close();
         dbManager2.close();
 
-        adapter = new CardmemberAdapter(this, R.layout.card, data);
+        adapter = new CardmemberAdapter(this, R.layout.card, data1);
         list.setAdapter(adapter);
         adapter.notifyDataSetChanged();
 
+
+        adapter.setItemClick(new CardmemberAdapter.ItemClick() {
+            @Override
+            public void onClick(View view, int position) {
+                dbOpen();
+                //System.out.println("onItemClick: " + id);
+                System.out.println("onItemClick position:" + position);
+                cursor = sqLiteDatabase.rawQuery("SELECT * FROM CARDMEMBER", null);
+                Cursor c = cursor;
+                c.moveToPosition(position);
+                Intent i = new Intent(MainActivity.this, PrintInformation2.class);
+                i.putExtra("_id", position);
+                i.putExtra("pname", c.getString(c.getColumnIndexOrThrow("p_name")));
+                i.putExtra("comname", c.getString(c.getColumnIndexOrThrow("c_name")));
+                i.putExtra("tel1", c.getString(c.getColumnIndexOrThrow("phone")));
+                i.putExtra("email1", c.getString(c.getColumnIndexOrThrow("email")));
+                i.putExtra("fax1", c.getString(c.getColumnIndexOrThrow("fax")));
+                i.putExtra("position", c.getString(c.getColumnIndexOrThrow("position")));
+                i.putExtra("op_name", c.getString(c.getColumnIndexOrThrow("op_name")));
+                i.putExtra("ophone", c.getString(c.getColumnIndexOrThrow("ophone")));
+                startActivity(i);
+                System.out.println("after startActivity()");
+
+                cursor.close();
+                dbClose();
+                dbManager.close();
+                System.out.println("onclick end");
+            }
+        });
+
+
+/*
         list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -288,7 +358,8 @@ public class MainActivity extends AppCompatActivity
                 System.out.println("onclick end");
             }
         });
-
+     */
+/*
         list.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             int position1;
             long id1;
@@ -335,7 +406,7 @@ public class MainActivity extends AppCompatActivity
                 return true;
             }
         });
-
+*/
         baseAPI = new TessBaseAPI();
         baseAPI.setDebug(true);
 
@@ -433,6 +504,7 @@ public class MainActivity extends AppCompatActivity
             Intent intent = new Intent();
             intent.setAction(MediaStore.ACTION_IMAGE_CAPTURE);
             intent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
+            System.out.println("REQUEST_CAMERA");
             startActivityForResult(intent, REQUEST_CAMERA);
             return true;
         } else if (id == R.id.nav_gallery) {
