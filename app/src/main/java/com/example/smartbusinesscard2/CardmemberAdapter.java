@@ -2,6 +2,8 @@ package com.example.smartbusinesscard2;
 
 
 import android.content.Context;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.graphics.drawable.Drawable;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.CardView;
@@ -28,10 +30,13 @@ import java.util.ArrayList;
 /**
  * Created by 현욱 on 2016-11-08.
  */
-public class CardmemberAdapter extends RecyclerView.Adapter<CardmemberAdapter.ViewHolder> {
+public class CardmemberAdapter extends RecyclerView.Adapter<CardmemberAdapter.ViewHolder> implements ItemTouchHelperListener{
     Context context;
     int layout;
     ArrayList<Cardmember> list;
+    SQLiteDatabase sqLiteDatabase;
+    Cursor cursor;
+    DBManager dbManager;
     private ItemClick itemClick;
     public interface ItemClick {
         public void onClick(View view,int position);
@@ -70,13 +75,20 @@ public class CardmemberAdapter extends RecyclerView.Adapter<CardmemberAdapter.Vi
 
         holder.textView2.setText(item.p_name.toString());
         holder.textView3.setText(item.c_name.toString());
-        holder.textView.setText(item._id+"");
         holder.cardview.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 itemClick.onClick(v, Position);
             }
         });
+        holder.cardview.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+
+                return true;
+            }
+        });
+
     }
 
     @Override
@@ -98,24 +110,44 @@ public class CardmemberAdapter extends RecyclerView.Adapter<CardmemberAdapter.Vi
         pnametv.setText(card.p_name);
         TextView cnametv = (TextView)convertView.findViewById(R.id.textView3);
         cnametv.setText(card.c_name);
-        TextView idtv = (TextView)convertView.findViewById(R.id.textView);
-        idtv.setText(String.valueOf(card._id));
         return convertView;
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         TextView textView2;
         TextView textView3;
-        TextView textView;
         CardView cardview;
-
+        ImageView imgmenu;
         public ViewHolder(View itemView) {
             super(itemView);
             textView2 = (TextView) itemView.findViewById(R.id.textView2);
             textView3 = (TextView) itemView.findViewById(R.id.textView3);
-            textView = (TextView) itemView.findViewById(R.id.textView);
             cardview = (CardView)itemView.findViewById(R.id.cardview);
-
+            imgmenu = (ImageView)itemView.findViewById(R.id.Menu2);
         }
+    }
+
+    @Override
+    public boolean onItemMove(int fromPosition, int toPosition) {
+
+        return true;
+    }
+
+    @Override
+    public void onItemRemove(int position) {
+        list.remove(position);
+        System.out.println("position: " + position);
+        if(dbManager == null) {
+            dbManager = new DBManager(context, "myDB.db", null, 1);
+        }
+        sqLiteDatabase = dbManager.getWritableDatabase();
+        cursor = sqLiteDatabase.rawQuery("SELECT * FROM CARDMEMBER", null);
+        Cursor c = cursor;
+        c.moveToPosition(position);
+        System.out.println("c op_name:" + c.getString(c.getColumnIndexOrThrow("op_name")));
+        dbManager.deleteCallDetail(c.getString(c.getColumnIndexOrThrow("op_name")), c.getString(c.getColumnIndexOrThrow("ophone")));
+        cursor.close();
+        sqLiteDatabase.close();
+        notifyItemRemoved(position);
     }
 }

@@ -5,6 +5,7 @@ package com.example.smartbusinesscard2;
  * db관리 파일
  */
 import android.content.Context;
+import android.database.sqlite.SQLiteException;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteDatabase.CursorFactory;
@@ -35,5 +36,19 @@ public class DBManager extends SQLiteOpenHelper {
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         //db.execSQL("DROP TABLE IF EXISTS "+ );
         onCreate(db);
+    }
+
+    public void deleteCallDetail(String op_name, String ophone) {
+        System.out.println("op_name: " + op_name + ", ophone: " + ophone);
+        SQLiteDatabase db = this.getWritableDatabase();
+        String sql = "delete from CARDMEMBER" + " where op_name = '"+ op_name + "' and ophone = '" + ophone + "';";
+        System.out.println("sql delete:" + sql);
+        try {
+            db.execSQL(sql);
+            System.out.println("complete delete");
+        } catch(SQLiteException e) {
+            System.out.println("error delete:" + e);
+        }
+        db.close();
     }
 }

@@ -19,8 +19,10 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.support.v7.widget.helper.ItemTouchHelper;
 import android.util.DisplayMetrics;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -159,6 +161,9 @@ public class MainActivity extends AppCompatActivity
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         System.out.println("onActivityResult Start");
 
+
+        adapter.notifyDataSetChanged();
+
         dbOpen();
         cursor = sqLiteDatabase.query("CARDMEMBER", null, null, null, null, null, null);
         data1 = new ArrayList<Cardmember>();
@@ -232,13 +237,11 @@ public class MainActivity extends AppCompatActivity
         );
 
         dbOpen();
-        //dbManager = new DBManager(this, "myDB.db", null, 1);
         linearLayoutManager = new LinearLayoutManager(getApplicationContext());
         list = (RecyclerView)findViewById(R.id.listView);
         list.setHasFixedSize(true);
         list.setLayoutManager(linearLayoutManager);
 
-        //sqLiteDatabase = dbManager.getReadableDatabase();
         cursor = sqLiteDatabase.query("CARDMEMBER", null, null, null, null, null, null);
         data1 = new ArrayList<Cardmember>();
         Cardmember cardmember;
@@ -297,7 +300,8 @@ public class MainActivity extends AppCompatActivity
         adapter = new CardmemberAdapter(this, R.layout.card, data1);
         list.setAdapter(adapter);
         adapter.notifyDataSetChanged();
-
+        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(new ItemTouchHelperCallback(adapter));
+        itemTouchHelper.attachToRecyclerView(list);
 
         adapter.setItemClick(new CardmemberAdapter.ItemClick() {
             @Override
@@ -327,38 +331,6 @@ public class MainActivity extends AppCompatActivity
                 System.out.println("onclick end");
             }
         });
-
-
-/*
-        list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                dbOpen();
-                System.out.println("onItemClick: " + id);
-                System.out.println("onItemClick position:" + position);
-                cursor = sqLiteDatabase.rawQuery("SELECT * FROM CARDMEMBER", null);
-                Cursor c = cursor;
-                c.moveToPosition(position);
-                Intent i = new Intent(MainActivity.this, PrintInformation2.class);
-                i.putExtra("_id", id);
-                i.putExtra("pname", c.getString(c.getColumnIndexOrThrow("p_name")));
-                i.putExtra("comname", c.getString(c.getColumnIndexOrThrow("c_name")));
-                i.putExtra("tel1", c.getString(c.getColumnIndexOrThrow("phone")));
-                i.putExtra("email1", c.getString(c.getColumnIndexOrThrow("email")));
-                i.putExtra("fax1", c.getString(c.getColumnIndexOrThrow("fax")));
-                i.putExtra("position", c.getString(c.getColumnIndexOrThrow("position")));
-                i.putExtra("op_name", c.getString(c.getColumnIndexOrThrow("op_name")));
-                i.putExtra("ophone", c.getString(c.getColumnIndexOrThrow("ophone")));
-                startActivity(i);
-                System.out.println("after startActivity()");
-
-                cursor.close();
-                dbClose();
-                dbManager.close();
-                System.out.println("onclick end");
-            }
-        });
-     */
 /*
         list.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             int position1;

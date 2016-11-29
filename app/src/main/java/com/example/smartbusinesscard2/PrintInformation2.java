@@ -24,7 +24,7 @@ public class PrintInformation2  extends AppCompatActivity implements View.OnClic
     DBManager dbManager;
     SQLiteDatabase sqLiteDatabase;
     Cursor cursor;
-    public long imsi = -2;
+    public int imsi = -2;
     public String phonenum = "";
     public String pname = "";
 
@@ -126,7 +126,7 @@ public class PrintInformation2  extends AppCompatActivity implements View.OnClic
                 values.put("email", emailTv.getText().toString());
                 values.put("fax", faxTv.getText().toString());
                 try {
-                    long imsi2 = i.getLongExtra("_id", imsi) + 1;
+                    int imsi2 = i.getIntExtra("_id", imsi) + 1;
                     String phonenum = i.getStringExtra("ophone");
                     String op_name = i.getStringExtra("op_name");
                     System.out.println("imsi2: " + imsi2);
