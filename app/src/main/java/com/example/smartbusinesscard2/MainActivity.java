@@ -8,6 +8,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -161,9 +162,8 @@ public class MainActivity extends AppCompatActivity
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         System.out.println("onActivityResult Start");
 
-
+        list.setAdapter(adapter);
         adapter.notifyDataSetChanged();
-
         dbOpen();
         cursor = sqLiteDatabase.query("CARDMEMBER", null, null, null, null, null, null);
         data1 = new ArrayList<Cardmember>();

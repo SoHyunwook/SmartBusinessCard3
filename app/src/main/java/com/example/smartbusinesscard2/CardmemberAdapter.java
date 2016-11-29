@@ -4,6 +4,7 @@ package com.example.smartbusinesscard2;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.CardView;
@@ -33,6 +34,8 @@ import java.util.ArrayList;
 public class CardmemberAdapter extends RecyclerView.Adapter<CardmemberAdapter.ViewHolder> implements ItemTouchHelperListener{
     Context context;
     int layout;
+    int randnum = 0;
+    String[] randColor = {"#FAED7D", "#BCE55C", "#6799FF", "#FFB2D9", "#FFBB00", "#FFA7A7", "#EAEAEA", "#6B9900"};
     ArrayList<Cardmember> list;
     SQLiteDatabase sqLiteDatabase;
     Cursor cursor;
@@ -52,6 +55,8 @@ public class CardmemberAdapter extends RecyclerView.Adapter<CardmemberAdapter.Vi
         this.layout = layout;
         this.list = list;
     }
+
+
 
     public int getCount() {
         return list.size();
@@ -75,20 +80,15 @@ public class CardmemberAdapter extends RecyclerView.Adapter<CardmemberAdapter.Vi
 
         holder.textView2.setText(item.p_name.toString());
         holder.textView3.setText(item.c_name.toString());
+        holder.cardview.setBackgroundColor(Color.parseColor(randColor[randnum % 8]));
+        randnum++;
+        holder.cardview.setRadius(20);
         holder.cardview.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 itemClick.onClick(v, Position);
             }
         });
-        holder.cardview.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View v) {
-
-                return true;
-            }
-        });
-
     }
 
     @Override
@@ -117,13 +117,11 @@ public class CardmemberAdapter extends RecyclerView.Adapter<CardmemberAdapter.Vi
         TextView textView2;
         TextView textView3;
         CardView cardview;
-        ImageView imgmenu;
         public ViewHolder(View itemView) {
             super(itemView);
             textView2 = (TextView) itemView.findViewById(R.id.textView2);
             textView3 = (TextView) itemView.findViewById(R.id.textView3);
             cardview = (CardView)itemView.findViewById(R.id.cardview);
-            imgmenu = (ImageView)itemView.findViewById(R.id.Menu2);
         }
     }
 

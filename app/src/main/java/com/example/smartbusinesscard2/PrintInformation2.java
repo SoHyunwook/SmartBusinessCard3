@@ -152,6 +152,7 @@ public class PrintInformation2  extends AppCompatActivity implements View.OnClic
                 dbClose();
                 System.out.println("Print");
                 finish();
+                startActivity(new Intent(this, MainActivity.class));
                 System.out.println("end of Print");
                 break;
         }

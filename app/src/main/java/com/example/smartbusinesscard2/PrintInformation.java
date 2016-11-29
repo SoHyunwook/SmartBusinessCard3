@@ -155,6 +155,7 @@ public class PrintInformation extends AppCompatActivity implements View.OnClickL
                 }
                 dbClose();
                 finish();
+                startActivity(new Intent(this, MainActivity.class));
                 break;
         }
     }
