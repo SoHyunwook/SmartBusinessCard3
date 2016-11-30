@@ -15,7 +15,6 @@ public class ItemTouchHelperCallback extends ItemTouchHelper.Callback {
 
     DBManager dbManager;
     SQLiteDatabase sqLiteDatabase;
-    Cursor cursor;
 
     ItemTouchHelperListener listener;
 

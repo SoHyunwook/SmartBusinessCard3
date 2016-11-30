@@ -43,7 +43,6 @@ public class OneFragment extends Fragment{
         data1 = new ArrayList<Cardmember>();
         Cardmember cardmember;
         while(cursor.moveToNext()) {
-            System.out.println("cursor in");
             cardmember = new Cardmember(cursor.getInt(0), cursor.getString(1), cursor.getString(2), cursor.getString(3), cursor.getString(4), cursor.getString(5), cursor.getString(6), cursor.getString(7), cursor.getString(8));
             cardmember._id = cursor.getInt(0);
             cardmember.p_name = cursor.getString(1);
@@ -83,7 +82,6 @@ public class OneFragment extends Fragment{
         adapter.setItemClick(new CardmemberAdapter.ItemClick() {
             @Override
             public void onClick(View view, int position) {
-                System.out.println("OneFragment onClick()");
                 dbOpen();
                 cursor = sqLiteDatabase.rawQuery("SELECT * FROM CARDMEMBER", null);
                 Cursor c = cursor;
@@ -109,17 +107,14 @@ public class OneFragment extends Fragment{
         list.setAdapter(adapter);
         list.setItemAnimator(new DefaultItemAnimator());
 
-        //dbManager.close();
         return view;
     }
 
     void dbOpen() {
         if(dbManager == null) {
             dbManager = new DBManager(getActivity(), "myDB.db", null, 1);
-            System.out.println("dbdbdbdbdb");
         }
         sqLiteDatabase = dbManager.getWritableDatabase();
-        System.out.println("dbdbdbdbdbdbdbdbdbdbdbdbdbdbdb");
     }
     void dbClose() {
         if(sqLiteDatabase != null) {
@@ -128,5 +123,4 @@ public class OneFragment extends Fragment{
             }
         }
     }
-
 }

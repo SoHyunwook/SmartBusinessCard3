@@ -1,46 +1,28 @@
 package com.example.smartbusinesscard2;
 
 import android.content.ContentValues;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteException;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
-import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.support.v7.widget.helper.ItemTouchHelper;
 import android.util.DisplayMetrics;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.ListView;
-import android.widget.Spinner;
-
 import com.google.android.gms.appindexing.Action;
 import com.google.android.gms.appindexing.AppIndex;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -51,7 +33,6 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.List;
 
 import android.support.v4.view.GravityCompat;
 import android.widget.TextView;
@@ -69,7 +50,7 @@ public class MainActivity extends AppCompatActivity
     RecyclerView list;
     CardmemberAdapter adapter;
     LinearLayoutManager linearLayoutManager;
-    ArrayList<Cardmember> data1 = null;
+    ArrayList<Cardmember> data1 = new ArrayList<Cardmember>();
     private static final int REQUEST_GALLERY = 0;
     private static final int REQUEST_CAMERA = 1;
 
@@ -81,7 +62,6 @@ public class MainActivity extends AppCompatActivity
     private GoogleApiClient client;
 
     private void inspectFromBitmap(Bitmap bitmap) {
-        System.out.println("inspectFromBitmap");
         Intent intent = new Intent(MainActivity.this,PrintInformation.class);
         baseAPI.setImage(bitmap);
         String text = baseAPI.getUTF8Text();
@@ -92,17 +72,14 @@ public class MainActivity extends AppCompatActivity
         for(int i = 0; i < arraysz; i++) {
             if(strarray[i].contains("@")) {
                 strarray[i].trim();
-                System.out.println("email:" + strarray[i]);
                 intent.putExtra("email1", strarray[i]);
                 continue;
             }
-            //strarray[i].matches(".*[0-9].*")
             if(strarray[i].contains("TEL") || strarray[i].contains("Tel")) {
                 strarray[i].trim();
                 int start = strarray[i].indexOf("L") + 3;
                 if(start < 1)
                     start = strarray[i].indexOf("l") + 3;
-                System.out.println("tel:"+strarray[i].substring(start));
                 intent.putExtra("tel1", strarray[i].substring(start));
                 continue;
             }
@@ -111,7 +88,6 @@ public class MainActivity extends AppCompatActivity
                 int start = strarray[i].indexOf("X") + 3;
                 if(start < 1)
                     start = strarray[i].indexOf("x") + 3;
-                System.out.println("fax:"+strarray[i].substring(start));
                 intent.putExtra("fax1", strarray[i].substring(start));
                 continue;
             }
@@ -127,7 +103,6 @@ public class MainActivity extends AppCompatActivity
     private void inspect1(Uri uri) {
         InputStream is = null;
         try {
-            System.out.println("inspect1 start");
             is = getContentResolver().openInputStream(uri);
             BitmapFactory.Options options = new BitmapFactory.Options();
             options.inPreferredConfig = Bitmap.Config.ARGB_8888;
@@ -135,14 +110,12 @@ public class MainActivity extends AppCompatActivity
             options.inScreenDensity = DisplayMetrics.DENSITY_LOW;
             Bitmap bitmap = BitmapFactory.decodeStream(is, null, options);
             inspectFromBitmap(bitmap);
-            System.out.println("inspect1 before end");
             return;
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } finally {
             if (is != null) {
                 try {
-                    System.out.println("is.close()");
                     is.close();
                 } catch (IOException e) {
                 }
@@ -170,8 +143,8 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        System.out.println("onActivityResult Start");
-
+        adapter = new CardmemberAdapter(this, R.layout.card, data1);
+        list = (RecyclerView)findViewById(R.id.listView);
         list.setAdapter(adapter);
         adapter.notifyDataSetChanged();
         dbOpen();
@@ -193,9 +166,7 @@ public class MainActivity extends AppCompatActivity
         }
         cursor.close();
         dbClose();
-        //sqLiteDatabase.close();
         dbManager.close();
-
 
         switch (requestCode) {
             case REQUEST_GALLERY:
@@ -205,7 +176,6 @@ public class MainActivity extends AppCompatActivity
                 break;
             case REQUEST_CAMERA:
                 if (imageUri != null) {
-                    System.out.println("onActivityResult's REQUEST_CAMERA");
                     inspect1(imageUri);
                     return;
                 }
@@ -230,7 +200,6 @@ public class MainActivity extends AppCompatActivity
         tabLayout.addTab(tabLayout.newTab().setText("COMPANY"));
         tabLayout.addTab(tabLayout.newTab().setText("POSITION"));
         tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
-        //tabLayout.setupWithViewPager(viewPager);
 
         viewPager = (ViewPager) findViewById(R.id.viewpager);
         PagerAdapter adapter3 = new PagerAdapter
@@ -241,7 +210,6 @@ public class MainActivity extends AppCompatActivity
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
                 viewPager.setCurrentItem(tab.getPosition());
-                System.out.println("tab position: " + tab.getPosition());
             }
 
             @Override
@@ -254,7 +222,6 @@ public class MainActivity extends AppCompatActivity
 
             }
         });
-
 
         FontClass.setDefaultFont(this, "DEFAULT", "NotoSans-Regular.ttf");
         FontClass.setDefaultFont(this, "MONOSPACE", "NotoSans-Regular.ttf");
@@ -294,90 +261,6 @@ public class MainActivity extends AppCompatActivity
         sqLiteDatabase2.close();
         dbManager2.close();
 
-        /*
-        adapter = new CardmemberAdapter(this, R.layout.card, data1);
-        list.setAdapter(adapter);
-        adapter.notifyDataSetChanged();
-        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(new ItemTouchHelperCallback(adapter));
-        itemTouchHelper.attachToRecyclerView(list);
-
-        adapter.setItemClick(new CardmemberAdapter.ItemClick() {
-            @Override
-            public void onClick(View view, int position) {
-                dbOpen();
-                //System.out.println("onItemClick: " + id);
-                System.out.println("onItemClick position:" + position);
-                cursor = sqLiteDatabase.rawQuery("SELECT * FROM CARDMEMBER", null);
-                Cursor c = cursor;
-                c.moveToPosition(position);
-                Intent i = new Intent(MainActivity.this, PrintInformation2.class);
-                i.putExtra("_id", position);
-                i.putExtra("pname", c.getString(c.getColumnIndexOrThrow("p_name")));
-                i.putExtra("comname", c.getString(c.getColumnIndexOrThrow("c_name")));
-                i.putExtra("tel1", c.getString(c.getColumnIndexOrThrow("phone")));
-                i.putExtra("email1", c.getString(c.getColumnIndexOrThrow("email")));
-                i.putExtra("fax1", c.getString(c.getColumnIndexOrThrow("fax")));
-                i.putExtra("position", c.getString(c.getColumnIndexOrThrow("position")));
-                i.putExtra("op_name", c.getString(c.getColumnIndexOrThrow("op_name")));
-                i.putExtra("ophone", c.getString(c.getColumnIndexOrThrow("ophone")));
-                startActivity(i);
-                System.out.println("after startActivity()");
-
-                cursor.close();
-                dbClose();
-                dbManager.close();
-                System.out.println("onclick end");
-            }
-        });
-        */
-/*
-        list.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
-            int position1;
-            long id1;
-            @Override
-            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-                position1 = position;
-                id1 = id;
-                System.out.println("onItemLongClick:" + id);
-                AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
-                builder.setMessage("Do you want delete this?")
-                        .setCancelable(true)
-                        .setPositiveButton("OK", new DialogInterface.OnClickListener(){
-                            public void onClick(DialogInterface dialog, int whichButton){
-                                dbOpen();
-                                cursor = sqLiteDatabase.rawQuery("SELECT * FROM CARDMEMBER", null);
-                                Cursor c1 = cursor;
-                                c1.moveToPosition(position1);
-                                System.out.println("position:" + position1);
-                                System.out.println("id+1:" + (id1 + 1));
-                                String sql = "delete from CARDMEMBER" + " where op_name = '"+ c1.getString(c1.getColumnIndexOrThrow("op_name")) + "' and ophone = '" + c1.getString(c1.getColumnIndexOrThrow("ophone")) + "';";
-                                System.out.println("sql delete:" + sql);
-                                try {
-                                    sqLiteDatabase.execSQL(sql);
-                                    System.out.println("complete delete");
-                                } catch(SQLiteException e) {
-                                    System.out.println("error delete:" + e);
-                                }
-
-                            }
-                        })
-                        .setNegativeButton("CANCEL", new DialogInterface.OnClickListener(){
-                            public void onClick(DialogInterface dialog, int whichButton){
-                                dialog.cancel();
-                            }
-                        });
-                AlertDialog dialog = builder.create();    // 알림창 객체 생성
-                dialog.show();    // 알림창 띄우기
-
-
-                cursor.close();
-                dbClose();
-                dbManager.close();
-                System.out.println("end of Long click");
-                return true;
-            }
-        });
-*/
         baseAPI = new TessBaseAPI();
         baseAPI.setDebug(true);
 
@@ -392,7 +275,6 @@ public class MainActivity extends AppCompatActivity
         }
         baseAPI.setPageSegMode(TessBaseAPI.PageSegMode.PSM_SPARSE_TEXT);
         client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
-        System.out.println("end of MainActiity oncreate");
     }
 
     @Override
@@ -446,13 +328,9 @@ public class MainActivity extends AppCompatActivity
     }
     void dbOpen() {
         if(dbManager == null) {
-            System.out.println("before");
             dbManager = new DBManager(this, "myDB.db", null, 1);
-            System.out.println("after");
         }
-        System.out.println("bbefore");
         sqLiteDatabase = dbManager.getWritableDatabase();
-        System.out.println("aafter");
     }
     void dbClose() {
         if(sqLiteDatabase != null) {

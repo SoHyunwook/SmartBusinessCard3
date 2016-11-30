@@ -5,25 +5,11 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
-import android.graphics.drawable.Drawable;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.TextView;
-import android.widget.Toast;
-import android.content.ClipData;
-import android.content.Context;
-import android.graphics.drawable.Drawable;
-import android.support.v4.content.ContextCompat;
-import android.support.v7.widget.RecyclerView;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -55,8 +41,6 @@ public class CardmemberAdapter extends RecyclerView.Adapter<CardmemberAdapter.Vi
         this.layout = layout;
         this.list = list;
     }
-
-
 
     public int getCount() {
         return list.size();
@@ -98,7 +82,6 @@ public class CardmemberAdapter extends RecyclerView.Adapter<CardmemberAdapter.Vi
 
     @Override
     public int getItemCount() {
-        System.out.println("list: " + list.size());
         return list.size();
     }
 
@@ -128,14 +111,12 @@ public class CardmemberAdapter extends RecyclerView.Adapter<CardmemberAdapter.Vi
 
     @Override
     public boolean onItemMove(int fromPosition, int toPosition) {
-
         return true;
     }
 
     @Override
     public void onItemRemove(int position) {
         list.remove(position);
-        System.out.println("position: " + position);
         if(dbManager == null) {
             dbManager = new DBManager(context, "myDB.db", null, 1);
         }
@@ -143,7 +124,6 @@ public class CardmemberAdapter extends RecyclerView.Adapter<CardmemberAdapter.Vi
         cursor = sqLiteDatabase.rawQuery("SELECT * FROM CARDMEMBER", null);
         Cursor c = cursor;
         c.moveToPosition(position);
-        System.out.println("c op_name:" + c.getString(c.getColumnIndexOrThrow("op_name")));
         dbManager.deleteCallDetail(c.getString(c.getColumnIndexOrThrow("op_name")), c.getString(c.getColumnIndexOrThrow("ophone")));
         cursor.close();
         sqLiteDatabase.close();
