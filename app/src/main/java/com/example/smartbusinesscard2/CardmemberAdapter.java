@@ -36,11 +36,11 @@ public class CardmemberAdapter extends RecyclerView.Adapter<CardmemberAdapter.Vi
     int layout;
     int randnum = 0;
     String[] randColor = {"#FAED7D", "#BCE55C", "#6799FF", "#FFB2D9", "#FFBB00", "#FFA7A7", "#EAEAEA", "#6B9900"};
-    ArrayList<Cardmember> list;
+    ArrayList<Cardmember> list = new ArrayList<Cardmember>();;
     SQLiteDatabase sqLiteDatabase;
     Cursor cursor;
     DBManager dbManager;
-    private ItemClick itemClick;
+    ItemClick itemClick;
     public interface ItemClick {
         public void onClick(View view,int position);
     }
@@ -98,6 +98,7 @@ public class CardmemberAdapter extends RecyclerView.Adapter<CardmemberAdapter.Vi
 
     @Override
     public int getItemCount() {
+        System.out.println("list: " + list.size());
         return list.size();
     }
 

@@ -242,9 +242,6 @@ public class MainActivity extends AppCompatActivity
             public void onTabSelected(TabLayout.Tab tab) {
                 viewPager.setCurrentItem(tab.getPosition());
                 System.out.println("tab position: " + tab.getPosition());
-                if(tab.getPosition() != 0) {
-                    list.removeView(list);
-                }
             }
 
             @Override
@@ -263,34 +260,6 @@ public class MainActivity extends AppCompatActivity
         FontClass.setDefaultFont(this, "MONOSPACE", "NotoSans-Regular.ttf");
         FontClass.setDefaultFont(this, "SERIF", "NotoSans-Regular.ttf");
         FontClass.setDefaultFont(this, "SANS_SERIF", "NotoSans-Bold.ttf");
-
-        dbOpen();
-        linearLayoutManager = new LinearLayoutManager(getApplicationContext());
-        list = (RecyclerView)findViewById(R.id.listView);
-        list.setHasFixedSize(true);
-        list.setLayoutManager(linearLayoutManager);
-
-        cursor = sqLiteDatabase.query("CARDMEMBER", null, null, null, null, null, null);
-        data1 = new ArrayList<Cardmember>();
-        Cardmember cardmember;
-        while(cursor.moveToNext()) {
-            cardmember = new Cardmember(cursor.getInt(0), cursor.getString(1), cursor.getString(2),cursor.getString(3),cursor.getString(4),cursor.getString(5),cursor.getString(6),cursor.getString(7),cursor.getString(8));
-            cardmember._id = cursor.getInt(0);
-            System.out.println("_id is : " + cardmember._id);
-            cardmember.p_name = cursor.getString(1);
-            cardmember.c_name = cursor.getString(2);
-            cardmember.phone = cursor.getString(3);
-            cardmember.email = cursor.getString(4);
-            cardmember.fax = cursor.getString(5);
-            cardmember.position = cursor.getString(6);
-            cardmember.op_name = cursor.getString(7);
-            cardmember.ophone = cursor.getString(8);
-            data1.add(cardmember);
-        }
-        cursor.close();
-        dbClose();
-        //sqLiteDatabase.close();
-        dbManager.close();
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -325,6 +294,7 @@ public class MainActivity extends AppCompatActivity
         sqLiteDatabase2.close();
         dbManager2.close();
 
+        /*
         adapter = new CardmemberAdapter(this, R.layout.card, data1);
         list.setAdapter(adapter);
         adapter.notifyDataSetChanged();
@@ -359,6 +329,7 @@ public class MainActivity extends AppCompatActivity
                 System.out.println("onclick end");
             }
         });
+        */
 /*
         list.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             int position1;
@@ -475,9 +446,13 @@ public class MainActivity extends AppCompatActivity
     }
     void dbOpen() {
         if(dbManager == null) {
+            System.out.println("before");
             dbManager = new DBManager(this, "myDB.db", null, 1);
+            System.out.println("after");
         }
+        System.out.println("bbefore");
         sqLiteDatabase = dbManager.getWritableDatabase();
+        System.out.println("aafter");
     }
     void dbClose() {
         if(sqLiteDatabase != null) {
@@ -511,7 +486,7 @@ public class MainActivity extends AppCompatActivity
             Intent intent1 = new Intent();
             intent1.setType("image/*");
             intent1.setAction(Intent.ACTION_GET_CONTENT);
-            startActivityForResult(intent1, REQUEST_GALLERY);
+                                                                                                                                                                                                                                                                                startActivityForResult(intent1, REQUEST_GALLERY);
             return true;
         } else if (id == R.id.nav_manage) {
             startActivity(new Intent(this, MyInformation.class));
