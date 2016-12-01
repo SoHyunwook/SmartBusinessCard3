@@ -1,0 +1,137 @@
+<android.support.v4.widget.NestedScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    android:layout_height="match_parent"
+    android:layout_width="match_parent">
+
+
+    <android.support.v7.widget.CardView
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/card_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            tools:context="com.example.freehoon.material02.MainActivity"
+            tools:showIn="@layout/my_information"
+            android:background="@drawable/profile"
+            android:paddingBottom="50dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Name"
+                android:id="@+id/name_label2"
+                android:layout_marginTop="33dp"
+                android:layout_alignParentTop="true"
+                android:layout_alignLeft="@+id/positionTextView2"
+                android:layout_alignStart="@+id/positionTextView2"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Position"
+                android:id="@+id/position_label2"
+                android:layout_below="@+id/nameTextView2"
+                android:layout_alignLeft="@+id/companyName_label2"
+                android:layout_alignStart="@+id/companyName_label2"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="CompanyName"
+                android:id="@+id/companyName_label2"
+                android:layout_below="@+id/positionTextView2"
+                android:layout_alignLeft="@+id/phon_label2"
+                android:layout_alignStart="@+id/phon_label2"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="PhoneNumber"
+                android:id="@+id/phon_label2"
+                android:layout_below="@+id/comNameTextView2"
+                android:layout_alignLeft="@+id/fax_label2"
+                android:layout_alignStart="@+id/fax_label2"
+                android:onClick="clicking"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="FaxNumber"
+                android:id="@+id/fax_label2"
+                android:layout_below="@+id/phoneTextView2"
+                android:layout_alignLeft="@+id/email_label2"
+                android:layout_alignStart="@+id/email_label2"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="E-mail"
+                android:id="@+id/email_label2"
+                android:layout_below="@+id/faxTextView2"
+                android:layout_marginLeft="31dp"
+                android:layout_marginStart="31dp"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/nameTextView2"
+                android:layout_below="@+id/name_label2"
+                android:layout_alignLeft="@+id/name_label2"
+                android:layout_alignStart="@+id/name_label2"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/positionTextView2"
+                android:layout_below="@+id/position_label2"
+                android:layout_alignLeft="@+id/companyName_label2"
+                android:layout_alignStart="@+id/companyName_label2"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/comNameTextView2"
+                android:layout_below="@+id/companyName_label2"
+                android:layout_alignLeft="@+id/phon_label2"
+                android:layout_alignStart="@+id/phon_label2"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/phoneTextView2"
+                android:text="010-3831-8791"
+                android:layout_below="@+id/phon_label2"
+                android:layout_alignLeft="@+id/phon_label2"
+                android:layout_alignStart="@+id/phon_label2"
+                android:onClick="clicking"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/faxTextView2"
+                android:layout_below="@+id/fax_label2"
+                android:layout_alignLeft="@+id/email_label2"
+                android:layout_alignStart="@+id/email_label2"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/emailTextView2"
+                android:layout_below="@+id/email_label2"
+                android:layout_alignLeft="@+id/email_label2"
+                android:layout_alignStart="@+id/email_label2"/>
+
+
+
+
+        </RelativeLayout>
+    </android.support.v7.widget.CardView>
+
+</android.support.v4.widget.NestedScrollView>

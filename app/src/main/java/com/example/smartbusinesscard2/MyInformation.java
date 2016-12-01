@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -16,7 +17,7 @@ import android.widget.TextView;
  */
 public class MyInformation extends AppCompatActivity implements View.OnClickListener {
 
-    TextView nameTv, conameTv, emailTv, telTv, faxTv, posTv;
+    TextView nameTv, conameTv, emailTv, telTv, faxTv, posTv, phoneTextView2;
     DBManager dbManager;
     SQLiteDatabase sqLiteDatabase;
     Cursor cursor;
@@ -25,6 +26,7 @@ public class MyInformation extends AppCompatActivity implements View.OnClickList
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.my_information);
+        phoneTextView2 = (TextView)findViewById(R.id.phoneTextView2);
 
         FontClass.setDefaultFont(this, "DEFAULT", "NotoSans-Regular.ttf");
         FontClass.setDefaultFont(this, "MONOSPACE", "NotoSans-Regular.ttf");
@@ -56,6 +58,12 @@ public class MyInformation extends AppCompatActivity implements View.OnClickList
         cursor.close();
         sqLiteDatabase.close();
         dbManager.close();
+    }
+
+    public void clicking(View v){
+        String data = phoneTextView2.getText().toString();
+        Intent myIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("tel:" + data));
+        startActivity(myIntent);
     }
 
     public void onClick(View v) {

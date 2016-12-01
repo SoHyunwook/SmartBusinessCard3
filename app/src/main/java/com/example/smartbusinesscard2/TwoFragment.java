@@ -5,6 +5,9 @@ package com.example.smartbusinesscard2;
  */
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -19,10 +22,14 @@ import java.util.ArrayList;
 
 public class TwoFragment extends Fragment{
 
+    DBManager dbManager;
+    SQLiteDatabase sqLiteDatabase;
+    Cursor cursor;
     RecyclerView mRecyclerView;
     LinearLayoutManager mLayoutManager;
     ArrayList<MyData> myDataset;
     AdapterTwo mAdapter;
+    AdapterTwo.ItemClick itemClick;
 
     public TwoFragment() {
         // Required empty public constructor
@@ -37,12 +44,12 @@ public class TwoFragment extends Fragment{
     private void initDataset() {
         //for Test
         myDataset = new ArrayList<>();
-        myDataset.add(new MyData(R.drawable.cj));
-        myDataset.add(new MyData(R.drawable.kb));
-        myDataset.add(new MyData(R.drawable.lg));
-        myDataset.add(new MyData(R.drawable.lotte));
-        myDataset.add(new MyData(R.drawable.samsung));
-        myDataset.add(new MyData(R.drawable.shinsegae));
+        myDataset.add(new MyData(R.drawable.cj, "CJ MEMBERS"));
+        myDataset.add(new MyData(R.drawable.kb, "KB MEMBERS"));
+        myDataset.add(new MyData(R.drawable.lg, "LG MEMBERS"));
+        myDataset.add(new MyData(R.drawable.lotte, "LOTTE MEMBERS"));
+        myDataset.add(new MyData(R.drawable.samsung, "SAMSUNG MEMBERS"));
+        myDataset.add(new MyData(R.drawable.shinsegae, "SHINSEGAE MEMBERS"));
     }
 
     @Override
@@ -61,6 +68,47 @@ public class TwoFragment extends Fragment{
         mAdapter = new AdapterTwo(myDataset);
         mRecyclerView.setAdapter(mAdapter);
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
+
+        mAdapter.setItemClick(new AdapterTwo.ItemClick() {
+            @Override
+            public void onClick(View view, int position) {
+                Intent i = new Intent(getActivity(), FragmentForTwo.class);
+                switch(position) {
+                    case 0:
+                        i.putExtra("group", "cj");
+                        break;
+                    case 1:
+                        i.putExtra("group", "kb");
+                        break;
+                    case 2:
+                        i.putExtra("group", "lg");
+                        break;
+                    case 3:
+                        i.putExtra("group", "lotte");
+                        break;
+                    case 4:
+                        i.putExtra("group", "samsung");
+                        break;
+                    case 5:
+                        i.putExtra("group", "shinsegae");
+                        break;
+                }
+                startActivity(i);
+            }
+        });
         return view;
+    }
+    void dbOpen() {
+        if(dbManager == null) {
+            dbManager = new DBManager(getActivity(), "myDB.db", null, 1);
+        }
+        sqLiteDatabase = dbManager.getWritableDatabase();
+    }
+    void dbClose() {
+        if(sqLiteDatabase != null) {
+            if(sqLiteDatabase.isOpen()) {
+                sqLiteDatabase.close();
+            }
+        }
     }
 }

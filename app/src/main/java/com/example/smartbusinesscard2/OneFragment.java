@@ -25,7 +25,6 @@ public class OneFragment extends Fragment{
     SQLiteDatabase sqLiteDatabase;
     Cursor cursor;
     CardmemberAdapter.ItemClick itemClick;
-    MainActivity main = new MainActivity();
     RecyclerView list;
     LinearLayoutManager linearLayoutManager;
     ArrayList<Cardmember> data1 = new ArrayList<Cardmember>();
