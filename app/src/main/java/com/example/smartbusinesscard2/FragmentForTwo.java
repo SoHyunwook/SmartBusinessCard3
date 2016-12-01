@@ -57,9 +57,7 @@ public class FragmentForTwo extends AppCompatActivity {
                         cardmember = new Cardmember(cursor.getInt(0), cursor.getString(1), cursor.getString(2), cursor.getString(3), cursor.getString(4), cursor.getString(5), cursor.getString(6), cursor.getString(7), cursor.getString(8));
                         cardmember._id = cursor.getInt(0);
                         cardmember.p_name = cursor.getString(1);
-                        System.out.println("p_name: " + cardmember.p_name);
                         cardmember.c_name = cursor.getString(2);
-                        System.out.println("c_name: " + cardmember.c_name);
                         cardmember.phone = cursor.getString(3);
                         cardmember.email = cursor.getString(4);
                         cardmember.fax = cursor.getString(5);
@@ -67,7 +65,6 @@ public class FragmentForTwo extends AppCompatActivity {
                         cardmember.op_name = cursor.getString(7);
                         cardmember.ophone = cursor.getString(8);
                         data1.add(cardmember);
-                        System.out.println("added!");
                     }
                 }
                 break;
@@ -77,9 +74,7 @@ public class FragmentForTwo extends AppCompatActivity {
                         cardmember = new Cardmember(cursor.getInt(0), cursor.getString(1), cursor.getString(2), cursor.getString(3), cursor.getString(4), cursor.getString(5), cursor.getString(6), cursor.getString(7), cursor.getString(8));
                         cardmember._id = cursor.getInt(0);
                         cardmember.p_name = cursor.getString(1);
-                        System.out.println("p_name: " + cardmember.p_name);
                         cardmember.c_name = cursor.getString(2);
-                        System.out.println("c_name: " + cardmember.c_name);
                         cardmember.phone = cursor.getString(3);
                         cardmember.email = cursor.getString(4);
                         cardmember.fax = cursor.getString(5);
@@ -87,7 +82,6 @@ public class FragmentForTwo extends AppCompatActivity {
                         cardmember.op_name = cursor.getString(7);
                         cardmember.ophone = cursor.getString(8);
                         data1.add(cardmember);
-                        System.out.println("added!");
                     }
                 }
                 break;
@@ -97,9 +91,7 @@ public class FragmentForTwo extends AppCompatActivity {
                         cardmember = new Cardmember(cursor.getInt(0), cursor.getString(1), cursor.getString(2), cursor.getString(3), cursor.getString(4), cursor.getString(5), cursor.getString(6), cursor.getString(7), cursor.getString(8));
                         cardmember._id = cursor.getInt(0);
                         cardmember.p_name = cursor.getString(1);
-                        System.out.println("p_name: " + cardmember.p_name);
                         cardmember.c_name = cursor.getString(2);
-                        System.out.println("c_name: " + cardmember.c_name);
                         cardmember.phone = cursor.getString(3);
                         cardmember.email = cursor.getString(4);
                         cardmember.fax = cursor.getString(5);
@@ -107,7 +99,6 @@ public class FragmentForTwo extends AppCompatActivity {
                         cardmember.op_name = cursor.getString(7);
                         cardmember.ophone = cursor.getString(8);
                         data1.add(cardmember);
-                        System.out.println("added!");
                     }
                 }
                 break;
@@ -117,9 +108,7 @@ public class FragmentForTwo extends AppCompatActivity {
                         cardmember = new Cardmember(cursor.getInt(0), cursor.getString(1), cursor.getString(2), cursor.getString(3), cursor.getString(4), cursor.getString(5), cursor.getString(6), cursor.getString(7), cursor.getString(8));
                         cardmember._id = cursor.getInt(0);
                         cardmember.p_name = cursor.getString(1);
-                        System.out.println("p_name: " + cardmember.p_name);
                         cardmember.c_name = cursor.getString(2);
-                        System.out.println("c_name: " + cardmember.c_name);
                         cardmember.phone = cursor.getString(3);
                         cardmember.email = cursor.getString(4);
                         cardmember.fax = cursor.getString(5);
@@ -127,7 +116,6 @@ public class FragmentForTwo extends AppCompatActivity {
                         cardmember.op_name = cursor.getString(7);
                         cardmember.ophone = cursor.getString(8);
                         data1.add(cardmember);
-                        System.out.println("added!");
                     }
                 }
                 break;
@@ -137,9 +125,7 @@ public class FragmentForTwo extends AppCompatActivity {
                         cardmember = new Cardmember(cursor.getInt(0), cursor.getString(1), cursor.getString(2), cursor.getString(3), cursor.getString(4), cursor.getString(5), cursor.getString(6), cursor.getString(7), cursor.getString(8));
                         cardmember._id = cursor.getInt(0);
                         cardmember.p_name = cursor.getString(1);
-                        System.out.println("p_name: " + cardmember.p_name);
                         cardmember.c_name = cursor.getString(2);
-                        System.out.println("c_name: " + cardmember.c_name);
                         cardmember.phone = cursor.getString(3);
                         cardmember.email = cursor.getString(4);
                         cardmember.fax = cursor.getString(5);
@@ -147,7 +133,6 @@ public class FragmentForTwo extends AppCompatActivity {
                         cardmember.op_name = cursor.getString(7);
                         cardmember.ophone = cursor.getString(8);
                         data1.add(cardmember);
-                        System.out.println("added!");
                     }
                 }
                 break;
@@ -157,9 +142,7 @@ public class FragmentForTwo extends AppCompatActivity {
                         cardmember = new Cardmember(cursor.getInt(0), cursor.getString(1), cursor.getString(2), cursor.getString(3), cursor.getString(4), cursor.getString(5), cursor.getString(6), cursor.getString(7), cursor.getString(8));
                         cardmember._id = cursor.getInt(0);
                         cardmember.p_name = cursor.getString(1);
-                        System.out.println("p_name: " + cardmember.p_name);
                         cardmember.c_name = cursor.getString(2);
-                        System.out.println("c_name: " + cardmember.c_name);
                         cardmember.phone = cursor.getString(3);
                         cardmember.email = cursor.getString(4);
                         cardmember.fax = cursor.getString(5);
@@ -167,7 +150,6 @@ public class FragmentForTwo extends AppCompatActivity {
                         cardmember.op_name = cursor.getString(7);
                         cardmember.ophone = cursor.getString(8);
                         data1.add(cardmember);
-                        System.out.println("added!");
                     }
                 }
                 break;

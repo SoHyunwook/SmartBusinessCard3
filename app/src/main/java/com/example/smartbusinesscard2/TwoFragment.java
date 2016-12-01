@@ -3,8 +3,6 @@ package com.example.smartbusinesscard2;
 /**
  * Created by 현욱 on 2016-11-29.
  */
-import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
