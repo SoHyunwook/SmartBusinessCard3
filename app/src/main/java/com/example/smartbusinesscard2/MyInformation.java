@@ -26,7 +26,6 @@ public class MyInformation extends AppCompatActivity implements View.OnClickList
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.my_information);
-        phoneTextView2 = (TextView)findViewById(R.id.phoneTextView2);
 
         FontClass.setDefaultFont(this, "DEFAULT", "NotoSans-Regular.ttf");
         FontClass.setDefaultFont(this, "MONOSPACE", "NotoSans-Regular.ttf");
@@ -36,6 +35,7 @@ public class MyInformation extends AppCompatActivity implements View.OnClickList
         findViewById(R.id.informEditBtn2).setOnClickListener(this);
         findViewById(R.id.backBtn).setOnClickListener(this);
         findViewById(R.id.saveBtn2).setOnClickListener(this);
+        findViewById(R.id.ivContactItem1).setOnClickListener(this);
 
         nameTv = (TextView)findViewById(R.id.nameTextView2);
         conameTv = (TextView)findViewById(R.id.comNameTextView2);
@@ -60,14 +60,13 @@ public class MyInformation extends AppCompatActivity implements View.OnClickList
         dbManager.close();
     }
 
-    public void clicking(View v){
-        String data = phoneTextView2.getText().toString();
-        Intent myIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("tel:" + data));
-        startActivity(myIntent);
-    }
-
     public void onClick(View v) {
         switch (v.getId()) {
+            case R.id.ivContactItem1:
+                String data = telTv.getText().toString();
+                Intent myIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("tel:" + data));
+                startActivity(myIntent);
+                break;
             case R.id.informEditBtn2:
                 Intent intent1 = new Intent(MyInformation.this,DialogCardEdit.class);
 
