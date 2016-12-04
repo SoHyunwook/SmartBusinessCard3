@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -44,6 +45,8 @@ public class PrintInformation extends AppCompatActivity implements View.OnClickL
 
         findViewById(R.id.informEditBtn1).setOnClickListener(this);
         findViewById(R.id.saveBtn1).setOnClickListener(this);
+        findViewById(R.id.backBtn7).setOnClickListener(this);
+        findViewById(R.id.ivContactItem1).setOnClickListener(this);
 
         Intent intent = getIntent();
 
@@ -79,6 +82,14 @@ public class PrintInformation extends AppCompatActivity implements View.OnClickL
     public void onClick(View v) {
         Intent i = getIntent();
         switch (v.getId()) {
+            case R.id.ivContactItem1:
+                String data = telTv.getText().toString();
+                Intent myIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("tel:" + data));
+                startActivity(myIntent);
+                break;
+            case R.id.backBtn7:
+                finish();
+                break;
             case R.id.informEditBtn1:
                 Intent intent1 = new Intent(PrintInformation.this,DialogCardEdit.class);
 
