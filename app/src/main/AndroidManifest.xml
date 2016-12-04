@@ -59,6 +59,10 @@
             android:label="Smart Business Card">
         </activity>
         <activity
+            android:name=".FragmentForThree"
+            android:label="Smart Business Card">
+        </activity>
+        <activity
             android:name=".MyInformation"
             android:label="My Information">
         </activity>
