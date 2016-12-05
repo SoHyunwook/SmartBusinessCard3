@@ -11,23 +11,12 @@
 
 
     <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Please Take Your Business Card"
+        android:layout_width="200dp"
+        android:layout_height="60dp"
+        android:text="USER\n REGISTRATION"
+        android:textColor="#000000"
         android:id="@+id/registerBtn"
         android:layout_centerVertical="true"
         android:layout_centerHorizontal="true" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="If you want to register your business card, and manage the others, please take your business card first! Click the button below."
-        android:id="@+id/informTextView"
-        android:layout_alignParentTop="true"
-        android:layout_marginTop="113dp"
-        android:layout_alignRight="@+id/registerBtn"
-        android:layout_alignEnd="@+id/registerBtn"
-        android:layout_alignLeft="@+id/registerBtn"
-        android:layout_alignStart="@+id/registerBtn" />
 
 </RelativeLayout>

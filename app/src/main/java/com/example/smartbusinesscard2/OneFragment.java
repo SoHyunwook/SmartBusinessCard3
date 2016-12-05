@@ -86,6 +86,7 @@ public class OneFragment extends Fragment{
                 Cursor c = cursor;
                 c.moveToPosition(position);
                 Intent i = new Intent(getActivity(), PrintInformation2.class);
+                System.out.println("sending _id:" + position);
                 i.putExtra("_id", position);
                 i.putExtra("pname", c.getString(c.getColumnIndexOrThrow("p_name")));
                 i.putExtra("comname", c.getString(c.getColumnIndexOrThrow("c_name")));

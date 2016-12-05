@@ -28,7 +28,7 @@ public class PrintInformation extends AppCompatActivity implements View.OnClickL
     DBManager dbManager;
     SQLiteDatabase sqLiteDatabase;
     Cursor cursor;
-    public long imsi = -2;
+    public int imsi = -2;
     public String phonenum = "";
     public String pname = "";
 
@@ -75,8 +75,8 @@ public class PrintInformation extends AppCompatActivity implements View.OnClickL
         posTv.setText(String.format("%s", pos));
 
         rg = (RadioGroup)findViewById(R.id.radioGroup3);
-        rg1 = (RadioGroup)findViewById(R.id.radioGroup4);
-        rg2 = (RadioGroup)findViewById(R.id.radioGroup5);
+        rg1 = (RadioGroup)findViewById(R.id.radioGroup5);
+        rg2 = (RadioGroup)findViewById(R.id.radioGroup4);
     }
 
     public void onClick(View v) {
@@ -103,55 +103,78 @@ public class PrintInformation extends AppCompatActivity implements View.OnClickL
                 startActivityForResult(intent1, 1);
                 break;
             case R.id.saveBtn1:
+                String personname="", companyname="", positionname="";
                 id = rg.getCheckedRadioButtonId();
                 System.out.println("rg id:" + id);
                 rb = (RadioButton)findViewById(id);
                 id1 = rg1.getCheckedRadioButtonId();
+                System.out.println("rg id1:" + id1);
                 rb1 = (RadioButton)findViewById(id1);
                 id2 = rg2.getCheckedRadioButtonId();
+                System.out.println("rg id2:" + id2);
                 rb2 = (RadioButton)findViewById(id2);
                 dbOpen();
                 ContentValues values = new ContentValues();
+                System.out.println("rb: " + rb.getText().toString());
                 if(rb.getText().toString().equals("Name")) {
+                    personname = nameTv.getText().toString();
                     values.put("p_name", nameTv.getText().toString());
                     values.put("op_name", nameTv.getText().toString());
                 }
-                if(rb.getText().toString().equals("Position"))
+                if(rb.getText().toString().equals("Position")) {
+                    positionname = nameTv.getText().toString();
                     values.put("position", nameTv.getText().toString());
-                if(rb.getText().toString().equals("Company Name"))
+                }
+                if(rb.getText().toString().equals("Company Name")) {
+                    companyname = nameTv.getText().toString();
                     values.put("c_name", nameTv.getText().toString());
+                }
                 if(rb1.getText().toString().equals("Name")) {
+                    personname = conameTv.getText().toString();
                     values.put("p_name", conameTv.getText().toString());
                     values.put("op_name", conameTv.getText().toString());
                 }
-                if(rb1.getText().toString().equals("Position"))
+                System.out.println("rb1: " + rb1.getText().toString());
+                if(rb1.getText().toString().equals("Position")) {
+                    positionname = conameTv.getText().toString();
                     values.put("position", conameTv.getText().toString());
-                if(rb1.getText().toString().equals("Company Name"))
+                }
+                if(rb1.getText().toString().equals("Company Name")) {
+                    companyname = conameTv.getText().toString();
                     values.put("c_name", conameTv.getText().toString());
+                }
                 if(rb2.getText().toString().equals("Name")) {
+                    personname = posTv.getText().toString();
                     values.put("p_name", posTv.getText().toString());
                     values.put("op_name", posTv.getText().toString());
                 }
-                if(rb2.getText().toString().equals("Position"))
+                System.out.println("rb2: " + rb2.getText().toString());
+                if(rb2.getText().toString().equals("Position")) {
+                    positionname = posTv.getText().toString();
                     values.put("position", posTv.getText().toString());
-                if(rb2.getText().toString().equals("Company Name"))
+                }
+                if(rb2.getText().toString().equals("Company Name")) {
+                    companyname = posTv.getText().toString();
                     values.put("c_name", posTv.getText().toString());
+                }
+
                 values.put("phone", telTv.getText().toString());
                 values.put("ophone", telTv.getText().toString());
                 values.put("email", emailTv.getText().toString());
                 values.put("fax", faxTv.getText().toString());
                 try {
-                    long imsi2 = i.getLongExtra("_id", imsi) + 1;
+                    System.out.println("_id:" + i.getLongExtra("_id", imsi));
+                    int imsi2 = i.getIntExtra("_id", imsi) + 1;
                     String phonenum = i.getStringExtra("ophone");
                     String op_name = i.getStringExtra("op_name");
                     System.out.println("imsi2: " + imsi2);
                     if(imsi2 >= 0) {
-                        String sql = "update CARDMEMBER" + " set p_name = '" + nameTv.getText().toString()  +
-                                "', c_name = '" + conameTv.getText().toString() +
+                        String sql = "update CARDMEMBER" + " set p_name = '" + personname  +
+                                "', c_name = '" + companyname +
                                 "', phone = '" + telTv.getText().toString() +
                                 "', email = '" + emailTv.getText().toString() +
                                 "', fax = '" + faxTv.getText().toString() +
-                                "', position = '" + posTv.getText().toString() +
+                                "', position = '" + positionname +
                                 "' where op_name = '" +op_name +
                                 "' and ophone = '" + phonenum +
                                 "';";

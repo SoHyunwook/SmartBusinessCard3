@@ -1,9 +1,5 @@
 package com.example.smartbusinesscard2;
 
-/**
- * Created by 현욱 on 2016-11-09.
- */
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -19,8 +15,6 @@ import com.google.api.client.json.jackson2.JacksonFactory;
 import com.google.api.client.repackaged.org.apache.commons.codec.binary.Base64;
 import com.google.api.client.util.ExponentialBackOff;
 
-import com.google.api.services.gmail.GmailScopes;
-
 import com.google.api.services.gmail.model.*;
 
 import android.accounts.AccountManager;
@@ -33,33 +27,43 @@ import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
-import android.os.Bundle;
 import android.text.TextUtils;
 import android.text.method.ScrollingMovementMethod;
-import android.util.Log;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Properties;
 
+import javax.activation.DataHandler;
+import javax.activation.DataSource;
+import javax.activation.FileDataSource;
+import javax.mail.BodyPart;
 import javax.mail.MessagingException;
 import javax.mail.Session;
-import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
+import javax.mail.internet.MimeMultipart;
 
+/**
+ * Created by yi_te on 2016-11-09.
+ */
 
 public class APIConnected extends Activity {
     GoogleAccountCredential mCredential;
     private TextView mOutputText;
     ProgressDialog mProgress;
     private EmailActivity get = new EmailActivity();
+    String htmlText;
+    String url;
+    String[] text;
+//    String[] text = new String[5];
 
     static final int REQUEST_ACCOUNT_PICKER = 1000;
     static final int REQUEST_AUTHORIZATION = 1001;
@@ -67,10 +71,6 @@ public class APIConnected extends Activity {
     private static final String PREF_ACCOUNT_NAME = "accountName";
     private static final String[] SCOPES = { "https://www.googleapis.com/auth/gmail.send" };
 
-    /**
-     * Create the main activity.
-     * @param savedInstanceState previously saved instance data.
-     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -98,7 +98,6 @@ public class APIConnected extends Activity {
 
         setContentView(activityLayout);
 
-        // Initialize credentials and service object.
         SharedPreferences settings = getPreferences(Context.MODE_PRIVATE);
         mCredential = GoogleAccountCredential.usingOAuth2(
                 getApplicationContext(), Arrays.asList(SCOPES))
@@ -106,11 +105,6 @@ public class APIConnected extends Activity {
                 .setSelectedAccountName(settings.getString(PREF_ACCOUNT_NAME, null));
     }
 
-
-    /**
-     * Called whenever this activity is pushed to the foreground, such as after
-     * a call to onCreate().
-     */
     @Override
     protected void onResume() {
         super.onResume();
@@ -122,16 +116,6 @@ public class APIConnected extends Activity {
         }
     }
 
-    /**
-     * Called when an activity launched here (specifically, AccountPicker
-     * and authorization) exits, giving you the requestCode you started it with,
-     * the resultCode it returned, and any additional data from it.
-     * @param requestCode code indicating which activity result is incoming.
-     * @param resultCode code indicating the result of the incoming
-     *     activity result.
-     * @param data Intent (containing result data) returned by incoming
-     *     activity result.
-     */
     @Override
     protected void onActivityResult(
             int requestCode, int resultCode, Intent data) {
@@ -169,11 +153,6 @@ public class APIConnected extends Activity {
         super.onActivityResult(requestCode, resultCode, data);
     }
 
-    /**
-     * Attempt to get a set of data from the Gmail API to display. If the
-     * email address isn't known yet, then call chooseAccount() method so the
-     * user can pick an account.
-     */
     private void refreshResults() {
         if (mCredential.getSelectedAccountName() == null) {
             chooseAccount();
@@ -186,19 +165,11 @@ public class APIConnected extends Activity {
         }
     }
 
-    /**
-     * Starts an activity in Google Play Services so the user can pick an
-     * account.
-     */
     private void chooseAccount() {
         startActivityForResult(
                 mCredential.newChooseAccountIntent(), REQUEST_ACCOUNT_PICKER);
     }
 
-    /**
-     * Checks whether the device currently has a network connection.
-     * @return true if the device has a network connection, false otherwise.
-     */
     private boolean isDeviceOnline() {
         ConnectivityManager connMgr =
                 (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
@@ -206,13 +177,6 @@ public class APIConnected extends Activity {
         return (networkInfo != null && networkInfo.isConnected());
     }
 
-    /**
-     * Check that Google Play services APK is installed and up to date. Will
-     * launch an error dialog for the user to update Google Play Services if
-     * possible.
-     * @return true if Google Play Services is available and up to
-     *     date on this device; false otherwise.
-     */
     private boolean isGooglePlayServicesAvailable() {
         final int connectionStatusCode =
                 GooglePlayServicesUtil.isGooglePlayServicesAvailable(this);
@@ -225,12 +189,6 @@ public class APIConnected extends Activity {
         return true;
     }
 
-    /**
-     * Display an error dialog showing that Google Play Services is missing
-     * or out of date.
-     * @param connectionStatusCode code describing the presence (or lack of)
-     *     Google Play Services on this device.
-     */
     void showGooglePlayServicesAvailabilityErrorDialog(
             final int connectionStatusCode) {
         Dialog dialog = GooglePlayServicesUtil.getErrorDialog(
@@ -240,10 +198,6 @@ public class APIConnected extends Activity {
         dialog.show();
     }
 
-    /**
-     * An asynchronous task that handles the Gmail API call.
-     * Placing the API calls in their own task ensures the UI stays responsive.
-     */
     private class MakeRequestTask extends AsyncTask<Void, Void, List<String>> {
         private com.google.api.services.gmail.Gmail mService = null;
         private Exception mLastError = null;
@@ -257,10 +211,6 @@ public class APIConnected extends Activity {
                     .build();
         }
 
-        /**
-         * Background task to call Gmail API.
-         * @param params no parameters needed for this task.
-         */
         @Override
         protected List<String> doInBackground(Void... params) {
             try {
@@ -271,23 +221,6 @@ public class APIConnected extends Activity {
                 cancel(true);
                 return null;
             }
-        }
-
-        /**
-         * Fetch a list of Gmail labels attached to the specified account.
-         * @return List of Strings labels.
-         * @throws IOException
-         */
-        private List<String> getDataFromApi() throws IOException {
-            // Get the labels in the user's account.
-            String user = "me";
-            List<String> labels = new ArrayList<String>();
-            ListLabelsResponse listResponse =
-                    mService.users().labels().list(user).execute();
-            for (Label label : listResponse.getLabels()) {
-                labels.add(label.getName());
-            }
-            return labels;
         }
 
         private Message MimeMessage2Message(MimeMessage msg) throws MessagingException, IOException
@@ -301,22 +234,68 @@ public class APIConnected extends Activity {
         }
         private void sendMail() throws IOException
         {
+            String str = get.s_message;
+            str += '\n';
+            String str2 = "";
+            int start=0, end;
+            for(int i=0; i<str.length(); i++){
+                if(str.charAt(i) == '\n'){
+                    end = i;
+                    str2 += str.substring(start, end);
+                    str2 +="<br/>";
+                    start = i+1;
+                }
+            }
+            System.out.println("!!!!!!!!!!!!!!!!" + str2);
             Properties props = System.getProperties();
             Session session = Session.getDefaultInstance(props, null);
             MimeMessage mimeMessage = new MimeMessage(session);
             Message msg = null;
+//            url = "http://imageshack.com/a/img924/876/NUnz8W.png";
+            url = "http://imageshack.com/a/img924/139/uI27Ri.jpg";
+            htmlText = "<HTML> <HEAD> <TITLE> </TITLE> </HEAD> <BODY> <table background = \""
+                    + url
+                    + "\" width=\"690\" height=\"471\" style=\"table-layout:fixed\">"
+                    + " <tr> <td height=\"auto\" style=\"word-break:break-all\">"
+                    + " <div style=\"padding-left: 50px; padding-right: 100px;\"> <h1>"
+                    + str2
+                    + " </div> </td> </tr>"
+                    + " </BODY>"
+                    + " </HTML>";
+            /*
+            htmlText = "<HTML>"
+                    + "<HEAD> <TITLE> </TITLE> </HEAD>"
+                    + "<BODY> <table background=\""
+                    + url
+                    + "\" width=\"210\" height=\"336\" style=\"table-layout:fixed\">"
+                    + "<tr> <td> </td> </tr> <tr> <td height=\"auto\" style=\"word-break:break-all\">"
+                    + "<div style=\"padding-left: 5px; padding-right: 5px;\">"
+                    + get.s_message
+                    + "</div> </td> </tr>"
+                    + "</BODY>"
+                    + "</HTML>";
+*/
+            System.out.println("htmlText = " + htmlText);
+
             try{
-                mimeMessage.addRecipient(javax.mail.Message.RecipientType.TO, new InternetAddress("yi_tee126@naver.com"));
-                mimeMessage.setSubject(String.format("%s", get.s_subject));
-                mimeMessage.setText(String.format("%s", get.s_message));
-                msg = MimeMessage2Message(mimeMessage);
+                for(int i=0; i<get.count; i++) {
+                    mimeMessage.addRecipient(javax.mail.Message.RecipientType.TO, new InternetAddress(String.format("%s", get.address2.get(i))));
+                    mimeMessage.setSubject(String.format("%s", get.s_subject));
+                    // mimeMessage.setText(String.format("%s", get.s_message));
+//                    mimeMessage.setContent(htmlText, "text/html; charset=utf-8");
+                    mimeMessage.setContent(htmlText, "text/html; charset=utf-8");
+                    msg = MimeMessage2Message(mimeMessage);
+                    System.out.println("2222222222" + get.address2.get(i));
+                    System.out.println("count = " + get.count);
+                }
+                get.count=0;
+                System.out.println("count = " + get.count);
             }
             catch (Exception e){
                 return;
             }
             mService.users().messages().send("me", msg ).execute();
         }
-
 
         @Override
         protected void onPreExecute() {
@@ -333,6 +312,7 @@ public class APIConnected extends Activity {
                 output.add(0, "Data retrieved using the Gmail API:");
                 mOutputText.setText(TextUtils.join("\n", output));
             }
+//            finish();
         }
 
         @Override

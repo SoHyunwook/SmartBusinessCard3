@@ -48,6 +48,8 @@ public class TwoFragment extends Fragment{
         myDataset.add(new MyData(R.drawable.lotte, "LOTTE MEMBERS"));
         myDataset.add(new MyData(R.drawable.samsung, "SAMSUNG MEMBERS"));
         myDataset.add(new MyData(R.drawable.shinsegae, "SHINSEGAE MEMBERS"));
+        myDataset.add(new MyData(R.drawable.university, "UNIVERSITY MEMBERS"));
+        myDataset.add(new MyData(R.drawable.etcetera, "ETCETERA MEMBERS"));
     }
 
     @Override
@@ -89,6 +91,12 @@ public class TwoFragment extends Fragment{
                         break;
                     case 5:
                         i.putExtra("group", "shinsegae");
+                        break;
+                    case 6:
+                        i.putExtra("group", "university");
+                        break;
+                    case 7:
+                        i.putExtra("group", "etcetera");
                         break;
                 }
                 startActivity(i);

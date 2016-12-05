@@ -1,7 +1,12 @@
 package com.example.smartbusinesscard2;
 
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteException;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.TextView;
@@ -11,6 +16,10 @@ import android.widget.TextView;
  */
 public class PrintEmail extends AppCompatActivity implements View.OnClickListener {
     TextView sub1, msg1, whom1, s_time1;
+    private MailCheck get2 = new MailCheck();
+    DBManager dbManager;
+    SQLiteDatabase sqLiteDatabase;
+    Cursor cursor;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -22,7 +31,7 @@ public class PrintEmail extends AppCompatActivity implements View.OnClickListene
         FontClass.setDefaultFont(this, "SERIF", "NotoSans-Regular.ttf");
         FontClass.setDefaultFont(this, "SANS_SERIF", "NotoSans-Bold.ttf");
 
-        findViewById(R.id.edit_b).setOnClickListener(this);
+        findViewById(R.id.delete_b).setOnClickListener(this);
         findViewById(R.id.ok_b).setOnClickListener(this);
 
         Intent intent = getIntent();
@@ -47,17 +56,57 @@ public class PrintEmail extends AppCompatActivity implements View.OnClickListene
     public void onClick(View v) {
         Intent i = getIntent();
         switch (v.getId()) {
-            case R.id.edit_b:
-                Intent intent1 = new Intent(PrintEmail.this, EditEmail.class);
-                intent1.putExtra("sub2", sub1.getText());
-                intent1.putExtra("msg2", msg1.getText());
-                intent1.putExtra("whom2", whom1.getText());
-                intent1.putExtra("time2", s_time1.getText());
-                startActivityForResult(intent1, 1);
+            case R.id.delete_b:
+                AlertDialog.Builder builder = new AlertDialog.Builder(PrintEmail.this);
+                builder.setMessage("Do you want to delete?")
+                        .setCancelable(true)
+                        .setPositiveButton("OK", new DialogInterface.OnClickListener(){
+                            public void onClick(DialogInterface dialog, int whichButton){
+                                dbOpen();
+                                cursor = sqLiteDatabase.rawQuery("SELECT * FROM EMAIL", null);
+                                Cursor c1 = cursor;
+                                c1.moveToPosition(get2.position2);
+                                System.out.println("position:" + get2.position2);
+                                String sql = "delete from EMAIL" + " where or_time = '"+ c1.getString(c1.getColumnIndexOrThrow("or_time")) + "' and or_sub = '" + c1.getString(c1.getColumnIndexOrThrow("or_sub")) + "';";
+                                System.out.println("sql delete:" + sql);
+                                try {
+                                    sqLiteDatabase.execSQL(sql);
+                                    System.out.println("complete delete");
+                                } catch(SQLiteException e) {
+                                    System.out.println("error delete:" + e);
+                                }
+                                Intent intent = new Intent(PrintEmail.this, MailCheck.class);
+                                startActivity(intent);
+                                cursor.close();
+                                dbClose();
+                                dbManager.close();
+                            }
+                        })
+                        .setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int whichButton) {
+                                dialog.cancel();
+                            }
+                        });
+                AlertDialog dialog = builder.create();    // 알림창 객체 생성
+                dialog.show();    // 알림창 띄우기
                 break;
             case R.id.ok_b:
                 finish();
                 break;
         }
     }
+    void dbOpen() {
+        if(dbManager == null) {
+            dbManager = new DBManager(this, "myDB.db", null, 1);
+        }
+        sqLiteDatabase = dbManager.getWritableDatabase();
+    }
+    void dbClose() {
+        if(sqLiteDatabase != null) {
+            if(sqLiteDatabase.isOpen()) {
+                sqLiteDatabase.close();
+            }
+        }
+    }
+
 }

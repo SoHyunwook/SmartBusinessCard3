@@ -26,6 +26,7 @@ public class FragmentForTwo extends AppCompatActivity {
     LinearLayoutManager linearLayoutManager;
     ArrayList<Cardmember> data1 = new ArrayList<Cardmember>();
     CardmemberAdapter adapter;
+    String uni="", uni1="";
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -139,6 +140,64 @@ public class FragmentForTwo extends AppCompatActivity {
             case "shinsegae":
                 while(cursor.moveToNext()) {
                     if(cursor.getString(2).toString().equals("SHINSEGAE") || cursor.getString(2).toString().equals("Shinsegae") || cursor.getString(2).toString().equals("shinsegae")) {
+                        cardmember = new Cardmember(cursor.getInt(0), cursor.getString(1), cursor.getString(2), cursor.getString(3), cursor.getString(4), cursor.getString(5), cursor.getString(6), cursor.getString(7), cursor.getString(8));
+                        cardmember._id = cursor.getInt(0);
+                        cardmember.p_name = cursor.getString(1);
+                        cardmember.c_name = cursor.getString(2);
+                        cardmember.phone = cursor.getString(3);
+                        cardmember.email = cursor.getString(4);
+                        cardmember.fax = cursor.getString(5);
+                        cardmember.position = cursor.getString(6);
+                        cardmember.op_name = cursor.getString(7);
+                        cardmember.ophone = cursor.getString(8);
+                        data1.add(cardmember);
+                    }
+                }
+                break;
+            case "university":
+                while(cursor.moveToNext()) {
+                    uni1="";
+                    uni = cursor.getString(2);
+                    System.out.println("uni:" + uni);
+                    for(int i=0; i<uni.length(); i++){
+                        if(uni.charAt(i) == ' '){
+                            uni1 = uni.substring(i + 1, uni.length());
+                        }
+                    }
+                    System.out.println("uni1:" + uni1);
+                    if(uni1.equals("UNIVERSITY") || uni1.equals("University") || uni1.equals("university")) {
+                        cardmember = new Cardmember(cursor.getInt(0), cursor.getString(1), cursor.getString(2), cursor.getString(3), cursor.getString(4), cursor.getString(5), cursor.getString(6), cursor.getString(7), cursor.getString(8));
+                        cardmember._id = cursor.getInt(0);
+                        cardmember.p_name = cursor.getString(1);
+                        cardmember.c_name = cursor.getString(2);
+                        cardmember.phone = cursor.getString(3);
+                        cardmember.email = cursor.getString(4);
+                        cardmember.fax = cursor.getString(5);
+                        cardmember.position = cursor.getString(6);
+                        cardmember.op_name = cursor.getString(7);
+                        cardmember.ophone = cursor.getString(8);
+                        data1.add(cardmember);
+                    }
+                }
+                break;
+            case "etcetera":
+                while(cursor.moveToNext()) {
+                    uni1 = "";
+                    uni = cursor.getString(2);
+                    System.out.println("uni:" + uni);
+                    for(int i=0; i<uni.length(); i++){
+                        if(uni.charAt(i) == ' '){
+                            uni1 = uni.substring(i + 1, uni.length());
+                        }
+                    }
+                    System.out.println("uni1:" + uni1);
+                    if(!(cursor.getString(2).toString().equals("SHINSEGAE") || cursor.getString(2).toString().equals("Shinsegae") || cursor.getString(2).toString().equals("shinsegae")
+                            || cursor.getString(2).toString().equals("CJ") || cursor.getString(2).toString().equals("Cj") || cursor.getString(2).toString().equals("cj")
+                            || cursor.getString(2).toString().equals("KB") || cursor.getString(2).toString().equals("Kb") || cursor.getString(2).toString().equals("kb")
+                            || cursor.getString(2).toString().equals("LG") || cursor.getString(2).toString().equals("Lg") || cursor.getString(2).toString().equals("lg")
+                            || cursor.getString(2).toString().equals("LOTTE") || cursor.getString(2).toString().equals("Lotte") || cursor.getString(2).toString().equals("lotte")
+                            || cursor.getString(2).toString().equals("SAMSUNG") || cursor.getString(2).toString().equals("Samsung") || cursor.getString(2).toString().equals("samsung")
+                            || uni1.equals("UNIVERSITY") || uni1.equals("University") || uni1.equals("university"))) {
                         cardmember = new Cardmember(cursor.getInt(0), cursor.getString(1), cursor.getString(2), cursor.getString(3), cursor.getString(4), cursor.getString(5), cursor.getString(6), cursor.getString(7), cursor.getString(8));
                         cardmember._id = cursor.getInt(0);
                         cardmember.p_name = cursor.getString(1);

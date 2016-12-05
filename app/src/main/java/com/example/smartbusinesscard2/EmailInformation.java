@@ -8,6 +8,8 @@ public class EmailInformation {
     public String subject;
     public String message;
     public String to_whom;
-    public String time;
+    public long time;
     public String show_time;
+    public String or_sub;
+    public long or_time;
 }

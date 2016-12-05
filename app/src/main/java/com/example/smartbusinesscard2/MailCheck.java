@@ -26,6 +26,8 @@ public class MailCheck extends AppCompatActivity{
     ArrayList<EmailInformation> data = null;
     Cursor cursor;
     ListView list;
+    static int position2;
+    static long id2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,11 +49,12 @@ public class MailCheck extends AppCompatActivity{
             emailinfo._id = cursor.getInt(0);
             emailinfo.subject = cursor.getString(1);
             emailinfo.message = cursor.getString(2);
-            emailinfo.time = cursor.getString(3);
+            emailinfo.time = cursor.getLong(3);
             emailinfo.show_time = cursor.getString(4);
             emailinfo.to_whom = cursor.getString(5);
+            emailinfo.or_sub = cursor.getString(6);
+            emailinfo.or_time = cursor.getLong(7);
             data.add(emailinfo);
-            System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!!");
         }
         cursor.close();
         dbClose();
@@ -59,13 +62,15 @@ public class MailCheck extends AppCompatActivity{
 
         adapter = new EmailInfoAdapter(this, R.layout.email, data);
         list.setAdapter(adapter);
-
+        adapter.notifyDataSetChanged();
 
         list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 dbOpen();
-                System.out.println("onItemClick: " + id);
+                position2 = position;
+                id2 = id;
+                System.out.println("onItemClick id: " + id);
                 System.out.println("onItemClick position:" + position);
                 cursor = sqLiteDatabase.rawQuery("SELECT * FROM EMAIL", null);
                 Cursor c = cursor;
@@ -77,10 +82,7 @@ public class MailCheck extends AppCompatActivity{
                 i.putExtra("time", c.getString(c.getColumnIndexOrThrow("time")));
                 i.putExtra("s_time", c.getString(c.getColumnIndexOrThrow("show_time")));
                 i.putExtra("whom", c.getString(c.getColumnIndexOrThrow("to_whom")));
-//                i.putExtra("position", c.getString(c.getColumnIndexOrThrow("position")));
                 startActivity(i);
-                System.out.println("ggggggggggggggggg");
-
                 cursor.close();
                 dbClose();
                 dbManager.close();
