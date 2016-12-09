@@ -57,6 +57,7 @@ public class SelectCompany extends Activity {
                 + s_company
                 + "'", null);
         System.out.println("company = " + s_company);
+        CompanyAddress = null;
         while(cursor2.moveToNext()){
             String name = cursor2.getString(1);
             if(cursor2.getString(4) != null) {
@@ -71,6 +72,7 @@ public class SelectCompany extends Activity {
         cursor3 = sqLiteDatabase.rawQuery("SELECT * FROM CARDMEMBER WHERE c_name!='"
                 + s_company
                 + "'", null);
+        NotCompanyAddress = null;
         while(cursor3.moveToNext()){
             String nname = cursor3.getString(1);
             if(cursor3.getString(4) != null) {
@@ -99,14 +101,14 @@ public class SelectCompany extends Activity {
                                         int groupPosition, long id) {
                 if(groupPosition == 0) {
                     EmailAddress = CompanyAddress;
-                    Toast.makeText(getApplicationContext(), "Select My Company",
-                            Toast.LENGTH_SHORT).show();
+                    //                 Toast.makeText(getApplicationContext(), "Select My Company",
+                    //                        Toast.LENGTH_SHORT).show();
                     System.out.println("EmailAddress = " + EmailAddress);
                 }
                 else if(groupPosition == 1) {
                     EmailAddress = NotCompanyAddress;
-                    Toast.makeText(getApplicationContext(), "Select Not My Company",
-                            Toast.LENGTH_SHORT).show();
+                    //               Toast.makeText(getApplicationContext(), "Select Not My Company",
+                    //                      Toast.LENGTH_SHORT).show();
                     System.out.println("EmailAddress = " + EmailAddress);
                 }
 
@@ -126,8 +128,8 @@ public class SelectCompany extends Activity {
             @Override
             public boolean onChildClick(ExpandableListView parent, View v,
                                         int groupPosition, int childPosition, long id) {
-                Toast.makeText(getApplicationContext(), "c click = " + childPosition,
-                        Toast.LENGTH_SHORT).show();
+                //        Toast.makeText(getApplicationContext(), "c click = " + childPosition,
+                //               Toast.LENGTH_SHORT).show();
                 return false;
             }
         });
@@ -136,8 +138,8 @@ public class SelectCompany extends Activity {
         mListView.setOnGroupCollapseListener(new ExpandableListView.OnGroupCollapseListener() {
             @Override
             public void onGroupCollapse(int groupPosition) {
-                Toast.makeText(getApplicationContext(), "g Collapse = " + groupPosition,
-                        Toast.LENGTH_SHORT).show();
+                //     Toast.makeText(getApplicationContext(), "g Collapse = " + groupPosition,
+                //           Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -145,8 +147,8 @@ public class SelectCompany extends Activity {
         mListView.setOnGroupExpandListener(new ExpandableListView.OnGroupExpandListener() {
             @Override
             public void onGroupExpand(int groupPosition) {
-                Toast.makeText(getApplicationContext(), "g Expand = " + groupPosition,
-                        Toast.LENGTH_SHORT).show();
+                //   Toast.makeText(getApplicationContext(), "g Expand = " + groupPosition,
+                //         Toast.LENGTH_SHORT).show();
             }
         });
     }

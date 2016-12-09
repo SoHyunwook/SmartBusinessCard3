@@ -16,7 +16,8 @@
         android:text="USER\n REGISTRATION"
         android:textColor="#000000"
         android:id="@+id/registerBtn"
-        android:layout_centerVertical="true"
-        android:layout_centerHorizontal="true" />
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="160dp" />
 
 </RelativeLayout>

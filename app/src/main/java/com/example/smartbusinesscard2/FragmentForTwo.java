@@ -10,6 +10,8 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.support.v7.widget.helper.ItemTouchHelper;
+import android.view.View;
 
 import java.util.ArrayList;
 
@@ -216,6 +218,39 @@ public class FragmentForTwo extends AppCompatActivity {
         cursor.close();
         dbClose();
         adapter = new CardmemberAdapter(this, R.layout.card, data1);
+
+
+        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(new ItemTouchHelperCallback(adapter));
+        itemTouchHelper.attachToRecyclerView(list);
+
+        adapter.setItemClick(new CardmemberAdapter.ItemClick() {
+            @Override
+            public void onClick(View view, int position) {
+                dbOpen();
+                cursor = sqLiteDatabase.rawQuery("SELECT * FROM CARDMEMBER", null);
+                Cursor c = cursor;
+                c.moveToPosition(position);
+                Intent i = new Intent(FragmentForTwo.this, PrintInformation2.class);
+                System.out.println("sending _id:" + position);
+                i.putExtra("_id", position);
+                i.putExtra("pname", c.getString(c.getColumnIndexOrThrow("p_name")));
+                i.putExtra("comname", c.getString(c.getColumnIndexOrThrow("c_name")));
+                i.putExtra("tel1", c.getString(c.getColumnIndexOrThrow("phone")));
+                i.putExtra("email1", c.getString(c.getColumnIndexOrThrow("email")));
+                i.putExtra("fax1", c.getString(c.getColumnIndexOrThrow("fax")));
+                i.putExtra("position", c.getString(c.getColumnIndexOrThrow("position")));
+                i.putExtra("op_name", c.getString(c.getColumnIndexOrThrow("op_name")));
+                i.putExtra("ophone", c.getString(c.getColumnIndexOrThrow("ophone")));
+                startActivity(i);
+
+                cursor.close();
+                dbClose();
+                dbManager.close();
+            }
+        });
+
+
+
         list.setAdapter(adapter);
         list.setItemAnimator(new DefaultItemAnimator());
     }

@@ -53,6 +53,7 @@ public class APIConnected extends Activity {
     private TextView mOutputText;
     ProgressDialog mProgress;
     private EmailActivity get = new EmailActivity();
+    private SelectPosition sel = new SelectPosition();
     String htmlText;
     String url;
 
@@ -229,43 +230,50 @@ public class APIConnected extends Activity {
             str += '\n';
             String str2 = "";
             int start=0, end;
-            for(int i=0; i<str.length(); i++){
-                if(str.charAt(i) == '\n'){
+            for(int i=0; i<str.length(); i++) {
+                if (str.charAt(i) == '\n') {
                     end = i;
                     str2 += str.substring(start, end);
-                    str2 +="<br/>";
-                    start = i+1;
+                    str2 += "<br/>";
+                    start = i + 1;
                 }
             }
+            String str3 = ""; // <br/> 넣어서
+            if(sel.pos == 0){ // 선배
+                str3 = "";
+            }
+            else if(sel.pos == 1){ // 동기
+                str3 = "";
+            }
+            else if(sel.pos == 2){ // 후배
+                str3 = "";
+            }
+
+            // 2분 뒤가 크리스마스라 가정
+            if(get.result/10000 < 148267794 && get.result/10000>148259160){ // 크리스마스 시간
+                if(get.s_message.contains("christmas") || get.s_message.contains("Christmas") || get.s_message.contains("CHRISTMAS")){
+                    url = "http://imageshack.com/a/img924/139/uI27Ri.jpg"; // 이것도 여러개 해서 random으로??
+                    htmlText = "<HTML> <HEAD> <TITLE> </TITLE> </HEAD> <BODY> <table background = \""
+                            + url
+                            + "\" width=\"690\" height=\"471\" style=\"table-layout:fixed\">"
+                            + " <tr> <td height=\"auto\" style=\"word-break:break-all\">"
+                            + " <div style=\"padding-left: 50px; padding-right: 100px;\"> <h1>"
+                            + str3
+                            + " </div> </td> </tr>"
+                            + " </BODY>"
+                            + " </HTML>";
+
+                }
+            }
+            else{
+                htmlText = str2;
+            }
+
             System.out.println("!!!!!!!!!!!!!!!!" + str2);
             Properties props = System.getProperties();
             Session session = Session.getDefaultInstance(props, null);
             MimeMessage mimeMessage = new MimeMessage(session);
             Message msg = null;
-//            url = "http://imageshack.com/a/img924/876/NUnz8W.png";
-            url = "http://imageshack.com/a/img924/139/uI27Ri.jpg";
-            htmlText = "<HTML> <HEAD> <TITLE> </TITLE> </HEAD> <BODY> <table background = \""
-                    + url
-                    + "\" width=\"690\" height=\"471\" style=\"table-layout:fixed\">"
-                    + " <tr> <td height=\"auto\" style=\"word-break:break-all\">"
-                    + " <div style=\"padding-left: 50px; padding-right: 100px;\"> <h1>"
-                    + str2
-                    + " </div> </td> </tr>"
-                    + " </BODY>"
-                    + " </HTML>";
-            /*
-            htmlText = "<HTML>"
-                    + "<HEAD> <TITLE> </TITLE> </HEAD>"
-                    + "<BODY> <table background=\""
-                    + url
-                    + "\" width=\"210\" height=\"336\" style=\"table-layout:fixed\">"
-                    + "<tr> <td> </td> </tr> <tr> <td height=\"auto\" style=\"word-break:break-all\">"
-                    + "<div style=\"padding-left: 5px; padding-right: 5px;\">"
-                    + get.s_message
-                    + "</div> </td> </tr>"
-                    + "</BODY>"
-                    + "</HTML>";
-*/
             System.out.println("htmlText = " + htmlText);
 
             try{
@@ -273,7 +281,6 @@ public class APIConnected extends Activity {
                     mimeMessage.addRecipient(javax.mail.Message.RecipientType.TO, new InternetAddress(String.format("%s", get.address2.get(i))));
                     mimeMessage.setSubject(String.format("%s", get.s_subject));
                     // mimeMessage.setText(String.format("%s", get.s_message));
-//                    mimeMessage.setContent(htmlText, "text/html; charset=utf-8");
                     mimeMessage.setContent(htmlText, "text/html; charset=utf-8");
                     msg = MimeMessage2Message(mimeMessage);
                     System.out.println("2222222222" + get.address2.get(i));

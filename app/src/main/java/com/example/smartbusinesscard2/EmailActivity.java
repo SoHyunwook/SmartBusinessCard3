@@ -164,8 +164,7 @@ public class EmailActivity extends Activity implements DatePicker.OnDateChangedL
                 setTime();
                 finish();
             }
-        });
-        cancel.setOnClickListener(new View.OnClickListener() {
+        }); cancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 finish();

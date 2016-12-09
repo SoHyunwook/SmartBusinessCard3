@@ -29,6 +29,7 @@ public class SelectPosition extends Activity {
     static String same_add, se_add, ju_add, Address;
     int user_rank, mem_rank;
     String name, senior, junior;
+    static int pos;
     Button ok;
 
     @Override
@@ -70,26 +71,6 @@ public class SelectPosition extends Activity {
         insert("Deputy General Manager", 5);
         insert("Staff", 6);
 
-        /*
-        sqLiteDatabase.execSQL("insert into POSITION (pos, rank) values ('Professor', 1);");
-        sqLiteDatabase.execSQL("insert into POSITION (pos, rank) values ('Associate Professor', 1);");
-        sqLiteDatabase.execSQL("insert into POSITION (pos, rank) values ('Chairman', 1);");
-        sqLiteDatabase.execSQL("insert into POSITION (pos, rank) values ('President', 1);");
-        sqLiteDatabase.execSQL("insert into POSITION (pos, rank) values ('CEO', 1);");
-        sqLiteDatabase.execSQL("insert into POSITION (pos, rank) values ('Vice Chairman', 2);");
-        sqLiteDatabase.execSQL("insert into POSITION (pos, rank) values ('Vice President', 2);");
-        sqLiteDatabase.execSQL("insert into POSITION (pos, rank) values ('Representative Director', 3);");
-        sqLiteDatabase.execSQL("insert into POSITION (pos, rank) values ('Managing Director', 3);");
-        sqLiteDatabase.execSQL("insert into POSITION (pos, rank) values ('Senior Managing Director', 3);");
-        sqLiteDatabase.execSQL("insert into POSITION (pos, rank) values ('Director', 3);");
-        sqLiteDatabase.execSQL("insert into POSITION (pos, rank) values ('Manager', 4);");
-        sqLiteDatabase.execSQL("insert into POSITION (pos, rank) values ('General Manager', 4);");
-        sqLiteDatabase.execSQL("insert into POSITION (pos, rank) values ('Assistant Manager', 5);");
-        sqLiteDatabase.execSQL("insert into POSITION (pos, rank) values ('Deputy General Manager', 5);");
-        sqLiteDatabase.execSQL("insert into POSITION (pos, rank) values ('Staff', 6);");
-        dbClose();
-*/
-
         dbOpen();
         cursor = sqLiteDatabase.query("USER", null, null, null, null, null, null);
         while(cursor.moveToNext()) {
@@ -106,6 +87,9 @@ public class SelectPosition extends Activity {
         cursor4.close();
         System.out.println("@@@@@@@@@@@@user" + user_rank);
         cursor2 = sqLiteDatabase.rawQuery("SELECT * FROM CARDMEMBER", null);
+        se_add = null;
+        same_add = null;
+        ju_add = null;
         while(cursor2.moveToNext()){
             cursor3 = sqLiteDatabase.rawQuery("SELECT * FROM POSIT WHERE pos='"
                     + cursor2.getString(6)
@@ -118,6 +102,7 @@ public class SelectPosition extends Activity {
                     se_add += cursor2.getString(4);
                     se_add += ",";
                 }
+                mChildListContent.add(senior);
             }
             else if(user_rank == mem_rank){
                 name = cursor2.getString(1);
@@ -125,6 +110,7 @@ public class SelectPosition extends Activity {
                     same_add += cursor2.getString(4);
                     same_add += ",";
                 }
+                mChildListContent2.add(name);
             }
             else if(user_rank < mem_rank){
                 junior = cursor2.getString(1);
@@ -132,12 +118,9 @@ public class SelectPosition extends Activity {
                     ju_add += cursor2.getString(4);
                     ju_add += ",";
                 }
+                mChildListContent3.add(junior);
             }
             System.out.println("@@@@@@@@@@@@mem" + mem_rank);
-
-            mChildListContent.add(senior);
-            mChildListContent2.add(name);
-            mChildListContent3.add(junior);
         }
         mChildList.add(mChildListContent);
         mChildList.add(mChildListContent2);
@@ -159,20 +142,23 @@ public class SelectPosition extends Activity {
                                         int groupPosition, long id) {
                 if(groupPosition == 0) {
                     Address = se_add;
-                    Toast.makeText(getApplicationContext(), "Select My Company",
-                            Toast.LENGTH_SHORT).show();
+                    pos = groupPosition;
+//                    Toast.makeText(getApplicationContext(), "Select My Company",
+//                            Toast.LENGTH_SHORT).show();
                     System.out.println("EmailAddress = " + Address);
                 }
                 else if(groupPosition == 1) {
                     Address = same_add;
-                    Toast.makeText(getApplicationContext(), "Select Not My Company",
-                            Toast.LENGTH_SHORT).show();
+                    pos = groupPosition;
+//                    Toast.makeText(getApplicationContext(), "Select Not My Company",
+                    //                           Toast.LENGTH_SHORT).show();
                     System.out.println("EmailAddress = " + Address);
                 }
                 else if(groupPosition == 2) {
                     Address = ju_add;
-                    Toast.makeText(getApplicationContext(), "Select Not My Company",
-                            Toast.LENGTH_SHORT).show();
+                    pos = groupPosition;
+//                    Toast.makeText(getApplicationContext(), "Select Not My Company",
+                    //                           Toast.LENGTH_SHORT).show();
                     System.out.println("EmailAddress = " + Address);
                 }
                 return false;
@@ -191,8 +177,8 @@ public class SelectPosition extends Activity {
             @Override
             public boolean onChildClick(ExpandableListView parent, View v,
                                         int groupPosition, int childPosition, long id) {
-                Toast.makeText(getApplicationContext(), "c click = " + childPosition,
-                        Toast.LENGTH_SHORT).show();
+                //       Toast.makeText(getApplicationContext(), "c click = " + childPosition,
+                //              Toast.LENGTH_SHORT).show();
                 return false;
             }
         });
@@ -201,8 +187,8 @@ public class SelectPosition extends Activity {
         mListView.setOnGroupCollapseListener(new ExpandableListView.OnGroupCollapseListener() {
             @Override
             public void onGroupCollapse(int groupPosition) {
-                Toast.makeText(getApplicationContext(), "g Collapse = " + groupPosition,
-                        Toast.LENGTH_SHORT).show();
+                //    Toast.makeText(getApplicationContext(), "g Collapse = " + groupPosition,
+                //          Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -210,8 +196,8 @@ public class SelectPosition extends Activity {
         mListView.setOnGroupExpandListener(new ExpandableListView.OnGroupExpandListener() {
             @Override
             public void onGroupExpand(int groupPosition) {
-                Toast.makeText(getApplicationContext(), "g Expand = " + groupPosition,
-                        Toast.LENGTH_SHORT).show();
+                //   Toast.makeText(getApplicationContext(), "g Expand = " + groupPosition,
+                //         Toast.LENGTH_SHORT).show();
             }
         });
     }
